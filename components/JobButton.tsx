@@ -8,9 +8,9 @@ interface IJobButton {
 
 const JobButton = ({ name, urlIcon, point }: IJobButton) => {
     return (
-        <div className="shadow-lg w-full h-full pb-full relative rounded-2xl bg-green-100 hover:cursor-pointer">
+        <div className="shadow-lg w-full min-h-[160px] flex items-center justify-center relative rounded-2xl bg-green-100 hover:cursor-pointer">
             <div className="flex flex-col items-center justify-center p-4">
-                <Image src={urlIcon} className="job-icons" width={60} height={60} alt="mop" />
+                <Image src={urlIcon} className="job-icons" width={70} height={70} alt="mop" />
                 <p className="mt-2 text-lg">{name}</p>
             </div>
             <div className="absolute right-2 top-2">
