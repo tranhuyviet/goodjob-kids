@@ -7,7 +7,7 @@ interface IProps {
 
 const Layout = ({ children }: IProps) => {
     return (
-        <div>
+        <div >
             <Navbar />
             <div>
                 {children}
