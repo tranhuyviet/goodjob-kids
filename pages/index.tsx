@@ -18,11 +18,6 @@ const Home: NextPage = () => {
           {jobs && jobs.map(job => (
             <JobButton key={job.name} job={job} />
           ))}
-          {/* <JobButton name="House Cleaning" urlIcon="/images/mop.png" star={2} />
-          <JobButton name="Dishwasher" urlIcon="/images/dishwasher.png" star={1} />
-          <JobButton name="Cleanup Toys" urlIcon="/images/toys.png" star={1} />
-          <JobButton name="Take Care" urlIcon="/images/baby-boy.png" star={1} />
-          <JobButton name="Do Homework" urlIcon="/images/homework.png" star={1} /> */}
         </div>
       </div>
     </div>

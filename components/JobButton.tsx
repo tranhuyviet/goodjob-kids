@@ -11,7 +11,7 @@ const JobButton = ({ job }: IJobButton) => {
     const handleJobClick = () => {
         const newJob: IJob = {
             ...job,
-            createAt: Date.now().toString()
+            createAt: String(Date.now())
         }
         dispatch(addJob(newJob))
     }
