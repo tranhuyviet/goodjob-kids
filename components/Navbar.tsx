@@ -2,14 +2,9 @@ import classNames from 'classNames';
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 
 const Navbar = () => {
     const { pathname } = useRouter()
-
-    useEffect(() => {
-        console.log(pathname)
-    }, [pathname])
     return (
         <nav className="h-[68px] container flex justify-center items-center bg-gray-100 shadow-md">
             <div className="flex gap-x-8">
@@ -38,9 +33,7 @@ const Navbar = () => {
                         <p className={classNames(`text-center -ml-[6px] ${pathname === '/history' ? 'nav-link-active' : ''}`)} >History</p>
                     </a>
                 </Link>
-
             </div>
-
         </nav>
     )
 }
