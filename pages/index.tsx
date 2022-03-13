@@ -7,7 +7,7 @@ import Title from '../components/Title'
 
 const Home: NextPage = () => {
   return (
-    <div className="container min-h-[calc(100vh-60px)] shadow-md">
+    <div className="container min-h-[calc(100vh-68px)] shadow-md">
       <Head>
         <title>Good Job Kids!</title>
         <meta name="description" content="Good Job Kids" />

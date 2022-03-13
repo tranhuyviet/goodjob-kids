@@ -11,4 +11,8 @@
     .job-icons {
         @apply h-12 w-12;
     }
+
+    .nav-link-active {
+        @apply font-bold text-red-400 tracking-wider;
+    }
 }
