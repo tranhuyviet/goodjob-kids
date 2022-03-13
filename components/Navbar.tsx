@@ -2,9 +2,11 @@ import classNames from 'classnames';
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useAppSelector } from '../redux/hooks';
 
 const Navbar = () => {
     const { pathname } = useRouter()
+    const totalStars = useAppSelector(state => state.jobs.totalStars)
     return (
         <nav className="h-[68px] container flex justify-center items-center bg-gray-100 shadow-md">
             <div className="flex gap-x-8">
@@ -21,7 +23,7 @@ const Navbar = () => {
                             <Image src="/images/star.png" width={38} height={38} alt="mop" />
                         </div>
                         <div className="absolute right-0 top-0 w-[38px] h-[38px] flex justify-center items-center">
-                            <p className="text-gray-700 font-bold text-md">12</p>
+                            <p className="text-gray-700 font-bold text-md">{totalStars}</p>
                         </div>
                         <p className={classNames(`text-center ${pathname === '/stars' ? 'nav-link-active' : ''}`)} >Stars</p>
                     </a>

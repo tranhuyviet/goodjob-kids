@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IJob {
-    _id: string;
+    _id?: string;
     name: string;
     star: number;
+    createAt: string;
 }
 
 export interface IJobsDone {
