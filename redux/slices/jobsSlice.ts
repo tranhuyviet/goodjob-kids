@@ -34,8 +34,11 @@ const jobsSlice = createSlice({
             state.jobs = [...state.jobs, action.payload];
             state.totalStars = calculateStars(state.jobs);
         },
+        removeJob: (state, action: PayloadAction<number>) => {
+            state.jobs.splice(action.payload, 1);
+        },
     },
 });
 
-export const { addJob } = jobsSlice.actions;
+export const { addJob, removeJob } = jobsSlice.actions;
 export default jobsSlice.reducer;

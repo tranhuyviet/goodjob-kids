@@ -1,9 +1,15 @@
 import moment from "moment";
-import { useAppSelector } from '../redux/hooks'
+import { useAppSelector, useAppDispatch } from '../redux/hooks'
+import { removeJob } from '../redux/slices/jobsSlice'
 import Image from 'next/image'
 
 const StarsPage = () => {
     const { jobs, totalStars } = useAppSelector(state => state.jobs)
+    const dispatch = useAppDispatch()
+
+    const handleRemoveJob = (index: number) => {
+        dispatch(removeJob(index))
+    }
     return (
         <div className="container min-h-[calc(100vh-68px)] shadow-md">
             {jobs && jobs.length > 0 && (
@@ -13,7 +19,7 @@ const StarsPage = () => {
                         <p className="text-center col-span-5 ">Jobs Done</p>
                         <p className="col-span-2 -ml-[8px]">Got Stars</p>
                     </div>
-                    {jobs.map(job => (
+                    {jobs.map((job, index) => (
                         <div className="grid grid-cols-12 border-l border-r border-b items-center py-2" key={job.name}>
                             <p className="text-center col-span-4">{moment(Number(job.createAt)).format('h:mm DD.MM.YYYY')}</p>
                             <div className="col-span-5 flex items-center">
@@ -24,7 +30,7 @@ const StarsPage = () => {
                                 <Image src="/images/star.png" className="rotate-12" width={36} height={36} alt="mop" />
                                 <p className="absolute top-2 left-4">{job.star}</p>
                             </div>
-                            <div className="col-span-1 -ml-2 hover:cursor-pointer">
+                            <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob(index)}>
                                 <Image src="/images/cancel.png" className="" width={20} height={20} alt="mop" />
                             </div>
                         </div>
