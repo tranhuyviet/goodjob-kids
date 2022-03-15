@@ -21,7 +21,7 @@ const StarsPage = () => {
                             <p className="col-span-2 -ml-[8px]">Got Stars</p>
                         </div>
                         {jobs.map((job, index) => (
-                            <div className="grid grid-cols-12 border-l border-r border-b items-center py-2" key={job.name}>
+                            <div className="grid grid-cols-12 border-l border-r border-b items-center py-2" key={index}>
                                 <p className="text-center col-span-4">{moment(Number(job.createAt)).format('h:mm DD.MM.YYYY')}</p>
                                 <div className="col-span-5 flex items-center">
                                     <Image src={job.image} width={32} height={32} alt="mop" />

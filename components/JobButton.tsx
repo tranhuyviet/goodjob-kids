@@ -1,12 +1,14 @@
 import Image from 'next/image'
+import { Dispatch, SetStateAction } from 'react'
 import { useAppDispatch } from '../redux/hooks'
 import { addJob, IJob } from '../redux/slices/jobsSlice'
 
 interface IJobButton {
-    job: IJob
+    job: IJob,
+    setIsOpenDialog: Dispatch<SetStateAction<boolean>>
 }
 
-const JobButton = ({ job }: IJobButton) => {
+const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
     const dispatch = useAppDispatch()
     const handleJobClick = () => {
         const newJob: IJob = {
@@ -14,6 +16,7 @@ const JobButton = ({ job }: IJobButton) => {
             createAt: String(Date.now())
         }
         dispatch(addJob(newJob))
+        setIsOpenDialog(true)
     }
     return (
         <div className="shadow-lg w-full min-h-[160px] flex items-center justify-center relative rounded-2xl bg-green-100 hover:cursor-pointer" onClick={handleJobClick}>
