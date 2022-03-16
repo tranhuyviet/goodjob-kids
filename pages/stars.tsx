@@ -2,20 +2,48 @@ import moment from "moment";
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import { removeJob } from '../redux/slices/jobsSlice'
 import Image from 'next/image'
+import { useState } from "react";
+
+interface IVariables {
+    name?: string
+    index?: number
+}
 
 const StarsPage = () => {
     const { jobs, totalStars } = useAppSelector(state => state.jobs)
     const dispatch = useAppDispatch()
-
-    const handleRemoveJob = (index: number) => {
-        dispatch(removeJob(index))
+    const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
+    const initialVariables: IVariables = {
+        name: undefined,
+        index: undefined,
     }
+    const [variables, setVariables] = useState<IVariables>(initialVariables)
+
+    const handleRemoveJob = ({ name, index }: IVariables): void => {
+        setIsOpenConfirmDialog(true)
+        setVariables({ name, index })
+    }
+
+    const confirmYesRemoveJob = (): void => {
+        if (variables.index) {
+            dispatch(removeJob(variables.index))
+        }
+        setIsOpenConfirmDialog(false)
+        setVariables(initialVariables)
+    }
+
+    const confirmNoRemoveJob = (): void => {
+        setIsOpenConfirmDialog(false)
+        setVariables(initialVariables)
+    }
+
+    console.log(isOpenConfirmDialog)
     return (
-        <div className="container min-h-[calc(100vh-68px)] shadow-md">
+        <div className="container min-h-[calc(100vh-68px)] shadow-md relative pt-6">
             {jobs && jobs.length > 0 && (
                 <>
                     <div className="shadow-md">
-                        <div className="grid grid-cols-12 mt-6 border bg-yellow-400 py-3 rounded-t-xl">
+                        <div className="grid grid-cols-12 border bg-yellow-400 py-3 rounded-t-xl">
                             <p className="text-center col-span-4 ">Time</p>
                             <p className="text-center col-span-5 ">Jobs Done</p>
                             <p className="col-span-2 -ml-[8px]">Got Stars</p>
@@ -31,25 +59,38 @@ const StarsPage = () => {
                                     <Image src="/images/star.png" className="rotate-12" width={36} height={36} alt="mop" />
                                     <p className="absolute top-2 left-4">{job.star}</p>
                                 </div>
-                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob(index)}>
+                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob({ name: job.name, index })}>
                                     <Image src="/images/cancel.png" className="" width={20} height={20} alt="mop" />
                                 </div>
+
                             </div>
                         ))}
-                        <div className="grid grid-cols-12 items-center bg-green-400">
+                        {/* <div className="grid grid-cols-12 items-center bg-green-400">
                             <p className="col-span-9 text-right mr-4">Total Stars:</p>
                             <div className="col-span-2 relative animate-pulse justify-start mt-1">
                                 <Image src="/images/star.png" className="rotate-12" width={36} height={36} alt="mop" />
                                 <p className="absolute top-2 left-4">{totalStars}</p>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="w-full mt-6 flex justify-center">
-                        <button className="hover:text-indigo-400 hover:border-indigo-400 hover:shadow-xl transition-all duration-300 border-indigo-600 border text-indigo-600 py-3 px-6 rounded-lg shadow-md tracking-wider flex items-center"><Image src="/images/pickup.png" className="rotate-12" width={36} height={36} alt="mop" /><span className="block ml-2 text-lg ">{`Pickup ${totalStars} Stars`}</span></button>
+                        <button className="hover:text-green-400 hover:border-green-400 hover:shadow-xl transition-all duration-300 border-green-600 border text-green-600 py-2 px-5 rounded-lg shadow-md tracking-wider flex items-center"><Image src="/images/pickup.png" className="rotate-12" width={36} height={36} alt="mop" /><span className="block ml-2 text-lg ">{`Pickup ${totalStars} Stars`}</span></button>
                     </div>
                 </>
             )}
             {jobs.length === 0 && <p className="text-center mt-4">You have not finished any job yet</p>}
+            {isOpenConfirmDialog && (
+                <div className="absolute inset-0 w-full h-full flex items-center justify-center backdrop-brightness-50" onClick={confirmNoRemoveJob}>
+                    <div className="w-3/4 h-[160px] bg-green-200 text-center rounded-3xl shadow-2xl">
+                        <p className="text-lg mt-4">{`Are you sure to remove`}</p>
+                        <p className="text-2xl font-bold tracking-wider mt-2">{variables?.name} ???</p>
+                        <div className="flex mt-4 justify-end pr-4">
+                            <button className="py-1 px-7 rounded-xl border shadow-md bg-green-600 text-gray-50 text-lg tracking-wider" type="button" onClick={confirmYesRemoveJob}>Yes</button>
+                            <button className="ml-4 py-1 px-7 rounded-xl border shadow-md bg-red-600 text-gray-50 text-lg tracking-wider" type="button" onClick={confirmNoRemoveJob}>No</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
