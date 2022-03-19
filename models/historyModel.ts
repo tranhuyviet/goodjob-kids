@@ -18,6 +18,7 @@ const historySchema = new Schema({
     ],
     totalStars: Number,
     timeGotStars: String,
+    comment: String,
 });
 
 const History = models.histories || model('histories', historySchema);
