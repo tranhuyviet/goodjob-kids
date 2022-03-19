@@ -1,5 +1,9 @@
 import { Document } from 'mongoose';
 
+export interface ErrorsObject {
+    [name: string]: string;
+}
+
 // JOB
 export interface IJob {
     _id?: string;

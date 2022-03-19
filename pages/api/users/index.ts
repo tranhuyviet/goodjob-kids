@@ -3,16 +3,20 @@ import nc from 'next-connect';
 import User from '../../../models/userModel';
 import userService from '../../../services/userService';
 import db from '../../../utils/db';
+import { errorParse } from '../../../utils/errorParse';
 import { resError, resSuccess } from '../../../utils/returnRes';
 import { IUserDocument } from '../../../utils/types';
+import { signupValidate } from '../../../utils/validate';
 
 const handler = nc();
 
 // add new user
 handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        console.log('user name', req.body);
         const { name } = req.body;
+
+        // validate name
+        await signupValidate.validate({ name }, { abortEarly: false });
 
         // connect db
         await db.connect();
@@ -43,7 +47,17 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         // return new user
         return resSuccess(res, user);
     } catch (error) {
-        console.log(error);
+        if (error instanceof Error && error.name == 'ValidationError') {
+            const errors = errorParse(error);
+            resError(res, 'Bad Request Error - Validate Input', errors, 400);
+        } else {
+            resError(
+                res,
+                'Something went wrong',
+                { global: 'Something went wrong' },
+                500
+            );
+        }
     }
 });
 
