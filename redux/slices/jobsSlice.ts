@@ -22,8 +22,10 @@ const jobsSlice = createSlice({
             state.jobsDone = [...state.jobsDone, action.payload];
             state.totalStars = calculateStars(state.jobsDone);
         },
-        removeJob: (state, action: PayloadAction<number>) => {
-            state.jobsDone.splice(action.payload, 1);
+        removeJob: (state, action: PayloadAction<{ _id: string }>) => {
+            state.jobsDone = state.jobsDone.filter(
+                (jobDone) => jobDone._id !== action.payload._id
+            );
         },
     },
 });

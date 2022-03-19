@@ -6,7 +6,7 @@ import { useState } from "react";
 
 interface IVariables {
     name?: string
-    index?: number
+    _id?: string
 }
 
 const StarsPage = () => {
@@ -15,18 +15,18 @@ const StarsPage = () => {
     const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
     const initialVariables: IVariables = {
         name: undefined,
-        index: undefined,
+        _id: undefined,
     }
     const [variables, setVariables] = useState<IVariables>(initialVariables)
 
-    const handleRemoveJob = ({ name, index }: IVariables): void => {
+    const handleRemoveJob = ({ name, _id }: IVariables): void => {
         setIsOpenConfirmDialog(true)
-        setVariables({ name, index })
+        setVariables({ name, _id })
     }
 
     const confirmYesRemoveJob = (): void => {
-        if (variables.index) {
-            dispatch(removeJob(variables.index))
+        if (variables._id) {
+            dispatch(removeJob({ _id: variables._id }))
         }
         setIsOpenConfirmDialog(false)
         setVariables(initialVariables)
@@ -46,8 +46,8 @@ const StarsPage = () => {
                             <p className="text-center col-span-5 ">Jobs Done</p>
                             <p className="col-span-2 -ml-[8px]">Got Stars</p>
                         </div>
-                        {jobsDone.map((jobDone, index) => (
-                            <div className="grid grid-cols-12 border-l border-r border-b items-center py-2" key={index}>
+                        {jobsDone.map((jobDone) => (
+                            <div className="grid grid-cols-12 border-l border-r border-b items-center py-2" key={jobDone._id}>
                                 <p className="text-center col-span-4">{moment(Number(jobDone.time)).format('h:mm DD.MM.YYYY')}</p>
                                 <div className="col-span-5 flex items-center">
                                     <Image src={jobDone.image} width={32} height={32} alt="mop" />
@@ -57,7 +57,7 @@ const StarsPage = () => {
                                     <Image src="/images/star.png" className="rotate-12" width={36} height={36} alt="mop" />
                                     <p className="absolute top-2 left-4">{jobDone.star}</p>
                                 </div>
-                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob({ name: jobDone.name, index })}>
+                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob({ name: jobDone.name, _id: jobDone._id })}>
                                     <Image src="/images/cancel.png" className="" width={20} height={20} alt="mop" />
                                 </div>
 
