@@ -10,7 +10,7 @@ interface IVariables {
 }
 
 const StarsPage = () => {
-    const { jobs, totalStars } = useAppSelector(state => state.jobs)
+    const { jobsDone, totalStars } = useAppSelector(state => state.jobs)
     const dispatch = useAppDispatch()
     const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
     const initialVariables: IVariables = {
@@ -38,7 +38,7 @@ const StarsPage = () => {
     }
     return (
         <div className="container min-h-[calc(100vh-68px)] shadow-md relative pt-6">
-            {jobs && jobs.length > 0 && (
+            {jobsDone && jobsDone.length > 0 && (
                 <>
                     <div className="shadow-md">
                         <div className="grid grid-cols-12 border bg-yellow-400 py-3 rounded-t-xl">
@@ -46,18 +46,18 @@ const StarsPage = () => {
                             <p className="text-center col-span-5 ">Jobs Done</p>
                             <p className="col-span-2 -ml-[8px]">Got Stars</p>
                         </div>
-                        {jobs.map((job, index) => (
+                        {jobsDone.map((jobDone, index) => (
                             <div className="grid grid-cols-12 border-l border-r border-b items-center py-2" key={index}>
-                                <p className="text-center col-span-4">{moment(Number(job.createAt)).format('h:mm DD.MM.YYYY')}</p>
+                                <p className="text-center col-span-4">{moment(Number(jobDone.time)).format('h:mm DD.MM.YYYY')}</p>
                                 <div className="col-span-5 flex items-center">
-                                    <Image src={job.image} width={32} height={32} alt="mop" />
-                                    <p className="ml-2">{job.name}</p>
+                                    <Image src={jobDone.image} width={32} height={32} alt="mop" />
+                                    <p className="ml-2">{jobDone.name}</p>
                                 </div>
                                 <div className="col-span-2 relative animate-pulse justify-start">
                                     <Image src="/images/star.png" className="rotate-12" width={36} height={36} alt="mop" />
-                                    <p className="absolute top-2 left-4">{job.star}</p>
+                                    <p className="absolute top-2 left-4">{jobDone.star}</p>
                                 </div>
-                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob({ name: job.name, index })}>
+                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob({ name: jobDone.name, index })}>
                                     <Image src="/images/cancel.png" className="" width={20} height={20} alt="mop" />
                                 </div>
 
@@ -76,7 +76,7 @@ const StarsPage = () => {
                     </div>
                 </>
             )}
-            {jobs.length === 0 && <p className="text-center mt-4">You have not finished any job yet</p>}
+            {jobsDone.length === 0 && <p className="text-center mt-4">You have not finished any job yet</p>}
             {isOpenConfirmDialog && (
                 <div className="absolute inset-0 w-full h-full flex items-center justify-center backdrop-brightness-50" onClick={confirmNoRemoveJob}>
                     <div className="w-3/4 h-[160px] bg-green-200 text-center rounded-3xl shadow-2xl">
