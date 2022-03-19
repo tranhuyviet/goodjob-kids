@@ -1,41 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface IJob {
-    _id?: string;
-    name: string;
-    image: string;
-    star: number;
-    createAt?: string;
-}
-
-export interface IJobsDone {
-    jobs: IJob[];
-    totalStars: number;
-}
+import { IJobDone, IJobsDone } from '../../utils/types';
 
 const initialState: IJobsDone = {
-    jobs: [],
+    jobsDone: [],
     totalStars: 0,
 };
 
-const calculateStars = (jobs: IJob[]): number => {
+const calculateStars = (jobsDone: IJobDone[]): number => {
     let totalStars = 0;
-    for (const job of jobs) {
-        totalStars += job.star;
+    for (const jobDone of jobsDone) {
+        totalStars += jobDone.star;
     }
     return totalStars;
 };
 
 const jobsSlice = createSlice({
-    name: 'stars',
+    name: 'jobsDone',
     initialState,
     reducers: {
-        addJob: (state, action: PayloadAction<IJob>) => {
-            state.jobs = [...state.jobs, action.payload];
-            state.totalStars = calculateStars(state.jobs);
+        addJob: (state, action: PayloadAction<IJobDone>) => {
+            state.jobsDone = [...state.jobsDone, action.payload];
+            state.totalStars = calculateStars(state.jobsDone);
         },
         removeJob: (state, action: PayloadAction<number>) => {
-            state.jobs.splice(action.payload, 1);
+            state.jobsDone.splice(action.payload, 1);
         },
     },
 });

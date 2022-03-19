@@ -36,8 +36,6 @@ const StarsPage = () => {
         setIsOpenConfirmDialog(false)
         setVariables(initialVariables)
     }
-
-    console.log(isOpenConfirmDialog)
     return (
         <div className="container min-h-[calc(100vh-68px)] shadow-md relative pt-6">
             {jobs && jobs.length > 0 && (

@@ -1,4 +1,4 @@
-import { IJob } from '../redux/slices/jobsSlice';
+import { IJob } from './types';
 
 export const jobs: IJob[] = [
     { name: 'House Cleaning', image: '/images/mop.png', star: 2 },
