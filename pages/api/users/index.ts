@@ -21,8 +21,11 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         // connect db
         await db.connect();
 
+        const nameTrimAndLowercase = name.trim().toLowerCase();
         // check user name is exist
-        const isExistUser = await userService.findUserByName(name);
+        const isExistUser = await userService.findUserByName(
+            nameTrimAndLowercase
+        );
 
         if (isExistUser) {
             return resError(
