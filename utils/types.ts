@@ -6,7 +6,7 @@ export interface ErrorsObject {
 
 // JOB
 export interface IJob {
-    _id?: string;
+    _id: string;
     name: string;
     image: string;
     star: number;
@@ -24,7 +24,7 @@ export interface IJobsDone {
 // USER
 export interface IUser {
     name: string;
-    jobsDone: IJobDone[];
+    jobsDone?: IJobDone[];
 }
 
 // PARAMS AND DOCUMENT
@@ -36,5 +36,5 @@ export type IJobParams = Document & {
 
 export type IUserDocument = Document & {
     name: string;
-    jobsDone: IJobDone[];
+    jobsDone?: IJobDone[];
 };
