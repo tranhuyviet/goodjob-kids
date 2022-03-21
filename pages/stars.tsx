@@ -3,6 +3,7 @@ import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import { removeJob } from '../redux/slices/jobsSlice'
 import Image from 'next/image'
 import { useState } from "react";
+import { GetServerSideProps } from "next";
 
 interface IVariables {
     name?: string
@@ -63,20 +64,13 @@ const StarsPage = () => {
 
                             </div>
                         ))}
-                        {/* <div className="grid grid-cols-12 items-center bg-green-400">
-                            <p className="col-span-9 text-right mr-4">Total Stars:</p>
-                            <div className="col-span-2 relative animate-pulse justify-start mt-1">
-                                <Image src="/images/star.png" className="rotate-12" width={36} height={36} alt="mop" />
-                                <p className="absolute top-2 left-4">{totalStars}</p>
-                            </div>
-                        </div> */}
                     </div>
                     <div className="w-full mt-6 flex justify-center">
                         <button className="hover:text-green-400 hover:border-green-400 hover:shadow-xl transition-all duration-300 border-green-600 border text-green-600 py-2 px-5 rounded-lg shadow-md tracking-wider flex items-center"><Image src="/images/pickup.png" className="rotate-12" width={36} height={36} alt="mop" /><span className="block ml-2 text-lg ">{`Pickup ${totalStars} Stars`}</span></button>
                     </div>
                 </>
             )}
-            {jobsDone.length === 0 && <p className="text-center mt-4">You have not finished any job yet</p>}
+            {jobsDone.length === 0 && <p className="text-center text-xl mt-4">You have not finished any job yet</p>}
             {isOpenConfirmDialog && (
                 <div className="absolute inset-0 w-full h-full flex items-center justify-center backdrop-brightness-50" onClick={confirmNoRemoveJob}>
                     <div className="w-3/4 h-[160px] bg-green-200 text-center rounded-3xl shadow-2xl">
@@ -94,3 +88,12 @@ const StarsPage = () => {
 }
 
 export default StarsPage
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const name = context.req.cookies.goodjobKids
+    if (!name) return { redirect: { destination: '/signup', permanent: false } };
+
+    return {
+        props: {}
+    }
+}

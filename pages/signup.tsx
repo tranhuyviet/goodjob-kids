@@ -3,10 +3,16 @@ import { useFormik } from 'formik'
 import { IUser } from '../utils/types'
 import axios from 'axios'
 import ReactLoading from 'react-loading'
-
+import { useRouter } from 'next/router'
+import cookie from 'js-cookie'
+import { useAppDispatch } from '../redux/hooks'
+import { signup } from '../redux/slices/userSlice'
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 
 const SignupPage = () => {
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
+    const dispatch = useAppDispatch()
     const initialValues: IUser = {
         name: ''
     }
@@ -17,7 +23,12 @@ const SignupPage = () => {
         try {
             setLoading(true)
             const { data } = await axios.post('/users', values)
-            console.log('SIGNUP:', data)
+
+            if (data.status === 'success') {
+                cookie.set('goodjobKids', data.data.name)
+                dispatch(signup(data.data.name))
+                router.push('/')
+            }
             setLoading(false)
             return
         } catch (error: any) {
@@ -38,10 +49,19 @@ const SignupPage = () => {
                         <span className="ml-3">Submit</span>
                     </button>
                 </form>
-
             </div>
         </div>
     )
 }
 
 export default SignupPage
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const name = context.req.cookies.goodjobKids
+    if (name) {
+        return { redirect: { destination: '/', permanent: false } };
+    }
+    return {
+        props: {}
+    }
+}

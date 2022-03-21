@@ -7,8 +7,9 @@ import { useAppSelector } from '../redux/hooks';
 const Navbar = () => {
     const { pathname } = useRouter()
     const totalStars = useAppSelector(state => state.jobs.totalStars)
+    const username = useAppSelector(state => state.user.name)
     return (
-        <nav className="h-[68px] container flex justify-center items-center bg-gray-100 shadow-md">
+        <nav className="h-[68px] container flex justify-between items-center bg-gray-100 shadow-md">
             <div className="flex gap-x-8">
                 <Link href="/" >
                     <a className="hover:cursor-pointer relative hover:nav-link-active">
@@ -35,6 +36,9 @@ const Navbar = () => {
                         <p className={classNames(`text-center -ml-[6px] ${pathname === '/history' ? 'nav-link-active' : ''}`)} >History</p>
                     </a>
                 </Link>
+            </div>
+            <div>
+                <p className="text-red-400 text-xl flex items-center"> <Image src="/images/hello.png" width={38} height={38} alt="mop" /><span className=" tracking-wider uppercase text-red-400 ml-2">{username}</span></p>
             </div>
         </nav>
     )

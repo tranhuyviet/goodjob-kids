@@ -1,12 +1,23 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import JobButton from '../components/JobButton'
 import Title from '../components/Title'
 import { jobs } from '../utils/jobsData'
 import Image from 'next/image'
+import { useAppDispatch } from '../redux/hooks'
+import { signup } from '../redux/slices/userSlice'
 
-const Home: NextPage = () => {
+interface IProps {
+  name: string
+}
+
+const Home: NextPage<IProps> = ({ name }) => {
+
+  const dispatch = useAppDispatch()
+  if (name) {
+    dispatch(signup(name))
+  }
 
   const [isOpenDialog, setIsOpenDialog] = useState(false)
 
@@ -34,9 +45,10 @@ const Home: NextPage = () => {
         </div>
         {isOpenDialog && (
           <div className="absolute w-full h-full bg-gray-600 opacity-90 inset-0 flex justify-center items-center">
-            <div>
-              <Title name={""} className="animate-ping" />
-              <Image src="/images/like.png" className=" animate-pulse mt-6 block" width={180} height={180} alt="mop" />
+            <div className="text-center">
+              <Title title={"Good Job"} className="animate-ping" />
+              <Title title={name} className=" animate-bounce" />
+              <Image src="/images/like.png" className=" animate-pulse mt-6 block" width={160} height={160} alt="mop" />
             </div>
           </div>
         )}
@@ -46,3 +58,14 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const name = context.req.cookies.goodjobKids
+  if (!name) return { redirect: { destination: '/signup', permanent: false } };
+
+  return {
+    props: {
+      name
+    }
+  }
+}

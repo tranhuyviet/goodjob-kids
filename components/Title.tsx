@@ -1,13 +1,11 @@
-import React, { HTMLAttributes } from 'react'
-
 interface ITitle {
-    name: string
-    className: string
+    title: string
+    className?: string
 }
 
-const Title = ({ name, className = '' }: ITitle) => {
+const Title = ({ title, className = '' }: ITitle) => {
     return (
-        <h1 className={`text-4xl text-center text-yellow-400 px-4 py-4 ${className}`}>{`Good Job ${name} !!!`}</h1>
+        <h1 className={`text-4xl text-center text-yellow-400 px-4 py-4 ${className} uppercase`}>{title}</h1>
     )
 }
 
