@@ -54,7 +54,7 @@ const StarsPage: NextPage<IUser> = ({ name }) => {
                             <p className="col-span-2 -ml-[8px]">Got Stars</p>
                         </div>
                         {jobsDone.map((jobDone) => (
-                            <div className="grid grid-cols-12 border-l border-r border-b items-center py-2" key={jobDone._id}>
+                            <div className="grid grid-cols-12 border-l border-r border-b items-center py-2" key={jobDone.jobDoneId}>
                                 <p className="text-center col-span-4">{moment(Number(jobDone.time)).format('h:mm DD.MM.YYYY')}</p>
                                 <div className="col-span-5 flex items-center">
                                     <Image src={jobDone.image} width={32} height={32} alt="mop" />
