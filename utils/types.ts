@@ -13,6 +13,7 @@ export interface IJob {
 }
 
 export interface IJobDone extends IJob {
+    jobDoneId: string;
     time: string;
 }
 
@@ -25,6 +26,7 @@ export interface IJobsDone {
 export interface IUser {
     name: string;
     jobsDone?: IJobDone[];
+    totalStars?: number;
 }
 
 // PARAMS AND DOCUMENT

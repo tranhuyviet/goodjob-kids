@@ -1,7 +1,9 @@
 import Image from 'next/image'
 import { Dispatch, SetStateAction } from 'react'
 import { useAppDispatch } from '../redux/hooks'
-import { addJob, IJob } from '../redux/slices/jobsSlice'
+import { addJob } from '../redux/slices/userSlice'
+import { IJob, IJobDone } from '../utils/types'
+import { v4 as uuidv4 } from 'uuid'
 
 interface IJobButton {
     job: IJob,
@@ -11,11 +13,12 @@ interface IJobButton {
 const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
     const dispatch = useAppDispatch()
     const handleJobClick = () => {
-        const newJob: IJob = {
+        const newJobDone: IJobDone = {
             ...job,
-            createAt: String(Date.now())
+            time: String(Date.now()),
+            jobDoneId: uuidv4()
         }
-        dispatch(addJob(newJob))
+        dispatch(addJob(newJobDone))
         setIsOpenDialog(true)
     }
     return (

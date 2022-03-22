@@ -6,11 +6,11 @@ import { useAppSelector } from '../redux/hooks';
 
 const Navbar = () => {
     const { pathname } = useRouter()
-    const totalStars = useAppSelector(state => state.jobs.totalStars)
+    const totalStars = useAppSelector(state => state.user.totalStars)
     const username = useAppSelector(state => state.user.name)
     return (
         <nav className="h-[68px] container flex justify-between items-center bg-gray-100 shadow-md">
-            <div className="flex gap-x-8">
+            <div className="flex gap-x-4">
                 <Link href="/" >
                     <a className="hover:cursor-pointer relative hover:nav-link-active">
                         <Image src="/images/home.png" width={32} height={32} alt="mop" />

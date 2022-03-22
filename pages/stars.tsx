@@ -1,15 +1,14 @@
 import moment from "moment";
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import { removeJob } from '../redux/slices/jobsSlice'
 import Image from 'next/image'
 import { useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { IUser } from "../utils/types";
-import { signup } from '../redux/slices/userSlice'
+import { signup, removeJob } from '../redux/slices/userSlice'
 
-interface IVariables {
-    jobName?: string
-    _id?: string
+interface IRemoveJobVariables {
+    jobDoneName?: string
+    jobDoneId?: string
 }
 
 const StarsPage: NextPage<IUser> = ({ name }) => {
@@ -19,22 +18,22 @@ const StarsPage: NextPage<IUser> = ({ name }) => {
         dispatch(signup(name))
     }
 
-    const { jobsDone, totalStars } = useAppSelector(state => state.jobs)
+    const { jobsDone, totalStars } = useAppSelector(state => state.user)
     const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
-    const initialVariables: IVariables = {
-        jobName: undefined,
-        _id: undefined,
+    const initialVariables: IRemoveJobVariables = {
+        jobDoneName: undefined,
+        jobDoneId: undefined,
     }
-    const [variables, setVariables] = useState<IVariables>(initialVariables)
+    const [variables, setVariables] = useState<IRemoveJobVariables>(initialVariables)
 
-    const handleRemoveJob = ({ jobName, _id }: IVariables): void => {
+    const handleRemoveJob = ({ jobDoneName, jobDoneId }: IRemoveJobVariables): void => {
         setIsOpenConfirmDialog(true)
-        setVariables({ jobName, _id })
+        setVariables({ jobDoneName, jobDoneId })
     }
 
     const confirmYesRemoveJob = (): void => {
-        if (variables._id) {
-            dispatch(removeJob({ _id: variables._id }))
+        if (variables.jobDoneId) {
+            dispatch(removeJob({ jobDoneId: variables.jobDoneId }))
         }
         setIsOpenConfirmDialog(false)
         setVariables(initialVariables)
@@ -45,7 +44,7 @@ const StarsPage: NextPage<IUser> = ({ name }) => {
         setVariables(initialVariables)
     }
     return (
-        <div className="container min-h-[calc(100vh-68px)] shadow-md relative pt-6">
+        <div className="container min-h-[calc(100vh-68px)] shadow-md pt-6">
             {jobsDone && jobsDone.length > 0 && (
                 <>
                     <div className="shadow-md">
@@ -65,10 +64,9 @@ const StarsPage: NextPage<IUser> = ({ name }) => {
                                     <Image src="/images/star.png" className="rotate-12" width={36} height={36} alt="mop" />
                                     <p className="absolute top-2 left-4">{jobDone.star}</p>
                                 </div>
-                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob({ jobName: jobDone.name, _id: jobDone._id })}>
+                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob({ jobDoneName: jobDone.name, jobDoneId: jobDone.jobDoneId })}>
                                     <Image src="/images/cancel.png" className="" width={20} height={20} alt="mop" />
                                 </div>
-
                             </div>
                         ))}
                     </div>
@@ -77,12 +75,12 @@ const StarsPage: NextPage<IUser> = ({ name }) => {
                     </div>
                 </>
             )}
-            {jobsDone.length === 0 && <p className="text-center text-xl mt-4">You have not finished any job yet</p>}
+            {jobsDone && jobsDone.length === 0 && <p className="text-center text-xl mt-4">You have not finished any job yet</p>}
             {isOpenConfirmDialog && (
-                <div className="absolute inset-0 w-full h-full flex items-center justify-center backdrop-brightness-50" onClick={confirmNoRemoveJob}>
+                <div className="absolute inset-0 container max-h-screen flex items-center justify-center backdrop-brightness-[.4]" onClick={confirmNoRemoveJob}>
                     <div className="w-3/4 h-[160px] bg-green-200 text-center rounded-3xl shadow-2xl">
                         <p className="text-lg mt-4">{`Are you sure to remove`}</p>
-                        <p className="text-2xl font-bold tracking-wider mt-2">{variables?.jobName} ???</p>
+                        <p className="text-2xl font-bold tracking-wider mt-2">{variables?.jobDoneName} ???</p>
                         <div className="flex mt-4 justify-end pr-4">
                             <button className="py-1 px-7 rounded-xl border shadow-md bg-green-600 text-gray-50 text-lg tracking-wider" type="button" onClick={confirmYesRemoveJob}>Yes</button>
                             <button className="ml-4 py-1 px-7 rounded-xl border shadow-md bg-red-600 text-gray-50 text-lg tracking-wider" type="button" onClick={confirmNoRemoveJob}>No</button>
