@@ -7,12 +7,9 @@ import { jobs } from '../utils/jobsData'
 import Image from 'next/image'
 import { useAppDispatch } from '../redux/hooks'
 import { signup } from '../redux/slices/userSlice'
+import { IUser } from '../utils/types'
 
-interface IProps {
-  name: string
-}
-
-const Home: NextPage<IProps> = ({ name }) => {
+const Home: NextPage<IUser> = ({ name }) => {
 
   const dispatch = useAppDispatch()
   if (name) {

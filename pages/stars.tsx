@@ -3,26 +3,33 @@ import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import { removeJob } from '../redux/slices/jobsSlice'
 import Image from 'next/image'
 import { useState } from "react";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
+import { IUser } from "../utils/types";
+import { signup } from '../redux/slices/userSlice'
 
 interface IVariables {
-    name?: string
+    jobName?: string
     _id?: string
 }
 
-const StarsPage = () => {
-    const { jobsDone, totalStars } = useAppSelector(state => state.jobs)
+const StarsPage: NextPage<IUser> = ({ name }) => {
+
     const dispatch = useAppDispatch()
+    if (name) {
+        dispatch(signup(name))
+    }
+
+    const { jobsDone, totalStars } = useAppSelector(state => state.jobs)
     const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
     const initialVariables: IVariables = {
-        name: undefined,
+        jobName: undefined,
         _id: undefined,
     }
     const [variables, setVariables] = useState<IVariables>(initialVariables)
 
-    const handleRemoveJob = ({ name, _id }: IVariables): void => {
+    const handleRemoveJob = ({ jobName, _id }: IVariables): void => {
         setIsOpenConfirmDialog(true)
-        setVariables({ name, _id })
+        setVariables({ jobName, _id })
     }
 
     const confirmYesRemoveJob = (): void => {
@@ -58,7 +65,7 @@ const StarsPage = () => {
                                     <Image src="/images/star.png" className="rotate-12" width={36} height={36} alt="mop" />
                                     <p className="absolute top-2 left-4">{jobDone.star}</p>
                                 </div>
-                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob({ name: jobDone.name, _id: jobDone._id })}>
+                                <div className="col-span-1 -ml-2 hover:cursor-pointer" onClick={() => handleRemoveJob({ jobName: jobDone.name, _id: jobDone._id })}>
                                     <Image src="/images/cancel.png" className="" width={20} height={20} alt="mop" />
                                 </div>
 
@@ -75,7 +82,7 @@ const StarsPage = () => {
                 <div className="absolute inset-0 w-full h-full flex items-center justify-center backdrop-brightness-50" onClick={confirmNoRemoveJob}>
                     <div className="w-3/4 h-[160px] bg-green-200 text-center rounded-3xl shadow-2xl">
                         <p className="text-lg mt-4">{`Are you sure to remove`}</p>
-                        <p className="text-2xl font-bold tracking-wider mt-2">{variables?.name} ???</p>
+                        <p className="text-2xl font-bold tracking-wider mt-2">{variables?.jobName} ???</p>
                         <div className="flex mt-4 justify-end pr-4">
                             <button className="py-1 px-7 rounded-xl border shadow-md bg-green-600 text-gray-50 text-lg tracking-wider" type="button" onClick={confirmYesRemoveJob}>Yes</button>
                             <button className="ml-4 py-1 px-7 rounded-xl border shadow-md bg-red-600 text-gray-50 text-lg tracking-wider" type="button" onClick={confirmNoRemoveJob}>No</button>
@@ -94,6 +101,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!name) return { redirect: { destination: '/signup', permanent: false } };
 
     return {
-        props: {}
+        props: {
+            name
+        }
     }
 }

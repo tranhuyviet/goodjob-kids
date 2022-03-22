@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import cookie from 'js-cookie'
 import { useAppDispatch } from '../redux/hooks'
 import { signup } from '../redux/slices/userSlice'
-import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
+import { GetServerSideProps } from 'next'
 
 const SignupPage = () => {
     const [loading, setLoading] = useState(false)
