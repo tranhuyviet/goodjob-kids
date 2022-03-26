@@ -12,10 +12,9 @@ const userSchema = new Schema({
     },
     jobsDone: [
         {
-            jobDone: {
-                type: Types.ObjectId,
-                ref: 'jobs',
-            },
+            name: String,
+            image: String,
+            star: Number,
             time: String,
         },
     ],

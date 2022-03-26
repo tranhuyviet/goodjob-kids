@@ -4,6 +4,7 @@ import { useAppDispatch } from '../redux/hooks'
 import { addJob } from '../redux/slices/userSlice'
 import { IJob, IJobDone } from '../utils/types'
 import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
 
 interface IJobButton {
     job: IJob,
@@ -12,14 +13,25 @@ interface IJobButton {
 
 const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
     const dispatch = useAppDispatch()
-    const handleJobClick = () => {
-        const newJobDone: IJobDone = {
-            ...job,
-            time: String(Date.now()),
-            jobDoneId: uuidv4()
+    const handleJobClick = async () => {
+        try {
+            // const newJobDone: IJobDone = {
+            //     ...job,
+            //     time: String(Date.now()),
+            //     jobDoneId: uuidv4()
+            // }
+            const newJobDone = {
+                ...job,
+                time: String(Date.now()),
+            }
+            const { data } = await axios.put('/users/name', newJobDone)
+            console.log(data);
+            // dispatch(addJob(newJobDone))
+            setIsOpenDialog(true)
+        } catch (error) {
+            console.log('AAAA', error)
         }
-        dispatch(addJob(newJobDone))
-        setIsOpenDialog(true)
+
     }
     return (
         <div className="shadow-lg w-full min-h-[160px] flex items-center justify-center relative rounded-2xl bg-green-100 hover:cursor-pointer" onClick={handleJobClick}>

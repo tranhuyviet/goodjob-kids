@@ -48,7 +48,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         await db.disconnect();
 
         // return new user
-        return resSuccess(res, user);
+        return resSuccess(res, newUser);
     } catch (error) {
         if (error instanceof Error && error.name == 'ValidationError') {
             const errors = errorParse(error);

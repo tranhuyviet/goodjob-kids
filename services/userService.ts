@@ -1,5 +1,5 @@
 import User from '../models/userModel';
-import { IUserDocument } from '../utils/types';
+import { IJobDone, IUserDocument } from '../utils/types';
 
 const save = async (user: IUserDocument): Promise<IUserDocument> => {
     return user.save();
