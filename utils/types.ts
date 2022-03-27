@@ -12,7 +12,7 @@ export interface IJob {
 }
 
 export interface IJobDone {
-    _id: string;
+    _id?: string;
     jobDone: string;
     time: string;
 }

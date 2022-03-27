@@ -33,7 +33,7 @@ handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
 
         // filter jobsdone
         user.jobsDone = user.jobsDone.filter(
-            (jobDone) => jobDone._id.toString() !== _jobDoneId.toString()
+            (jobDone) => jobDone._id!.toString() !== _jobDoneId.toString()
         );
 
         // save user
