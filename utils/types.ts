@@ -11,8 +11,9 @@ export interface IJob {
     star: number;
 }
 
-export interface IJobDone extends IJob {
-    // jobDoneId: string;
+export interface IJobDone {
+    _id: string;
+    jobDone: string;
     time: string;
 }
 
@@ -45,4 +46,11 @@ export type IJobDocument = Document & {
     name: string;
     image: string;
     start: number;
+};
+
+export type ITokenGenerator = {
+    _id: string;
+    name: string;
+    userName: string;
+    iat?: number;
 };

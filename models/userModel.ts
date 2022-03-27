@@ -17,9 +17,10 @@ const userSchema = new Schema({
     },
     jobsDone: [
         {
-            name: String,
-            image: String,
-            star: Number,
+            jobDone: {
+                type: Types.ObjectId,
+                ref: 'jobs',
+            },
             time: String,
         },
     ],
@@ -27,10 +28,11 @@ const userSchema = new Schema({
 
 // return token to client
 userSchema.methods.returnToken = function returnToken() {
-    return generateToken(
-        { _id: this._id, name: this.name, userName: this.userName },
-        process.env.JWT_SECRET as string
-    );
+    return generateToken({
+        _id: this._id,
+        name: this.name,
+        userName: this.userName,
+    });
 };
 
 const User = models.users || model('users', userSchema);

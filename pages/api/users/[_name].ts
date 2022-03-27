@@ -21,7 +21,7 @@ handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
         await db.connect();
 
         // find user by name
-        const user = await userService.findUserByName(username);
+        // const user = await userService.findUserByName(username);
 
         if (!user) {
             throw new Error('Can not found user');

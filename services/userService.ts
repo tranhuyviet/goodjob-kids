@@ -11,6 +11,10 @@ const findUserByUserName = async (
     return User.findOne({ userName: userName });
 };
 
-const userService = { save, findUserByUserName };
+const findUserByUserId = async (_id: string): Promise<IUserDocument | null> => {
+    return User.findById(_id);
+};
+
+const userService = { save, findUserByUserName, findUserByUserId };
 
 export default userService;
