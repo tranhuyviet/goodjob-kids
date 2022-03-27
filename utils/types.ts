@@ -37,5 +37,6 @@ export type IJobParams = Document & {
 
 export type IUserDocument = Document & {
     name: string;
-    jobsDone?: IJobDone[];
+    jobsDone: IJobDone[];
+    returnToken: () => string;
 };

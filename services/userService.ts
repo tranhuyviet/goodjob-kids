@@ -1,14 +1,16 @@
 import User from '../models/userModel';
-import { IJobDone, IUserDocument } from '../utils/types';
+import { IUserDocument } from '../utils/types';
 
 const save = async (user: IUserDocument): Promise<IUserDocument> => {
     return user.save();
 };
 
-const findUserByName = async (name: string): Promise<IUserDocument | null> => {
-    return User.findOne({ name });
+const findUserByUserName = async (
+    userName: string
+): Promise<IUserDocument | null> => {
+    return User.findOne({ userName: userName });
 };
 
-const userService = { save, findUserByName };
+const userService = { save, findUserByUserName };
 
 export default userService;

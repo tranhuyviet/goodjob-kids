@@ -4,6 +4,7 @@ import User from '../../../models/userModel';
 import userService from '../../../services/userService';
 import db from '../../../utils/db';
 import { errorParse } from '../../../utils/errorParse';
+import { generateUserName } from '../../../utils/generate';
 import { resError, resSuccess } from '../../../utils/returnRes';
 import { IUserDocument } from '../../../utils/types';
 import { signupValidate } from '../../../utils/validate';
@@ -21,34 +22,27 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         // connect db
         await db.connect();
 
-        const nameTrimAndLowercase = name.trim().toLowerCase();
-        // check user name is exist
-        const isExistUser = await userService.findUserByName(
-            nameTrimAndLowercase
-        );
-
-        if (isExistUser) {
-            return resError(
-                res,
-                'Conflict Error',
-                {
-                    name: 'This name is already taken. Please enter another name.',
-                },
-                409
-            );
-        }
+        // create userName
+        let userName: string = '';
+        do {
+            userName = generateUserName(name.trim());
+        } while (!!(await userService.findUserByUserName(userName)));
 
         // create new user
-        const user: IUserDocument = new User({ name });
+        const newUser: IUserDocument = new User({
+            name: name.trim(),
+            userName,
+            jobsDone: [],
+        });
 
         // save user
-        const newUser = await userService.save(user);
+        const user = await userService.save(newUser);
 
         // disconnect db
         await db.disconnect();
 
         // return new user
-        return resSuccess(res, newUser);
+        return resSuccess(res, user.returnToken());
     } catch (error) {
         if (error instanceof Error && error.name == 'ValidationError') {
             const errors = errorParse(error);
