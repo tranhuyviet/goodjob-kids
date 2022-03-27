@@ -40,3 +40,9 @@ export type IUserDocument = Document & {
     jobsDone: IJobDone[];
     returnToken: () => string;
 };
+
+export type IJobDocument = Document & {
+    name: string;
+    image: string;
+    start: number;
+};

@@ -1,16 +1,72 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
+import Job from '../../../models/jobModel';
+import jobService from '../../../services/jobService';
+import db from '../../../utils/db';
+import { errorParse } from '../../../utils/errorParse';
+import { resError, resSuccess } from '../../../utils/returnRes';
+import { IJobDocument } from '../../../utils/types';
+import { jobValidate } from '../../../utils/validate';
 
 const handler = nc();
 
-// add job done
+// add new job
 handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        console.log('ADD JOB DONE', req.body);
+        const { name, image, star } = req.body;
 
-        res.status(200).json({ name: 'John Doe' });
+        // validate job
+        await jobValidate.validate(
+            { name, image, star },
+            { abortEarly: false }
+        );
+
+        // connect db
+        await db.connect();
+
+        // checking dublicate job
+        const isExistJob = await jobService.findJobByName(
+            name.trim().toLowerCase()
+        );
+
+        if (isExistJob) {
+            return resError(
+                res,
+                'Bad Request Error',
+                {
+                    job: 'This job is already taken. Please enter another job.',
+                },
+                400
+            );
+        }
+
+        // create new job
+        const newJob: IJobDocument = new Job({
+            name: name.trim().toLowerCase(),
+            image: image.trim(),
+            star,
+        });
+
+        // save job to database
+        const job = await jobService.save(newJob);
+
+        // disconnect db
+        await db.disconnect();
+
+        // return job
+        return resSuccess(res, job);
     } catch (error) {
-        console.log(error);
+        if (error instanceof Error && error.name == 'ValidationError') {
+            const errors = errorParse(error);
+            resError(res, 'Bad Request Error - Validate Input', errors, 400);
+        } else {
+            resError(
+                res,
+                'Something went wrong',
+                { global: 'Something went wrong' },
+                500
+            );
+        }
     }
 });
 

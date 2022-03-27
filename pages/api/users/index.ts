@@ -35,7 +35,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
             jobsDone: [],
         });
 
-        // save user
+        // save user to database
         const user = await userService.save(newUser);
 
         // disconnect db
