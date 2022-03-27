@@ -9,7 +9,7 @@ const historySchema = new Schema({
     },
     jobsDone: [
         {
-            jobDone: {
+            jobId: {
                 type: Types.ObjectId,
                 ref: 'jobs',
             },

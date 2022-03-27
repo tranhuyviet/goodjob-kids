@@ -16,7 +16,7 @@ handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
         // connect db
         await db.connect();
 
-        // find the user
+        // find the authenticated user
         const user = await userService.findUserByUserId(
             generateAuthenticatedUserId(req) as string
         );
@@ -36,9 +36,11 @@ handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
             jobId: Object(jobId),
             time,
         };
+        console.log(jobDone);
 
         // add jobdone to array jobsdone and save
         user.jobsDone.push(jobDone);
+        console.log(user.jobsDone);
         const updatedUser = await userService.save(user);
         console.log(updatedUser.jobsDone[updatedUser.jobsDone.length - 1]._id);
 

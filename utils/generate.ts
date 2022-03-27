@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { NextApiRequest } from 'next';
-import { ITokenGenerator } from './types';
+import { IGetJobDone, IJobDone, ITokenGenerator } from './types';
 
 const secret = process.env.JWT_SECRET as string;
 
@@ -35,4 +35,12 @@ export const generateAuthenticatedUserId = (
     } else {
         return null;
     }
+};
+
+export const calculateStars = (jobsDone: IGetJobDone[]): number => {
+    let totalStars = 0;
+    for (const jobDone of jobsDone) {
+        totalStars += jobDone.jobId.star;
+    }
+    return totalStars;
 };

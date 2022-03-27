@@ -6,7 +6,6 @@ export interface ErrorsObject {
 
 // JOB
 export interface IJob {
-    _id?: string;
     name: string;
     image: string;
     star: number;
@@ -15,6 +14,19 @@ export interface IJob {
 export interface IJobDone {
     _id?: string;
     jobId: string;
+    time: string;
+}
+
+export interface IGetJob {
+    _id: string;
+    name: string;
+    image: string;
+    star: number;
+}
+
+export interface IGetJobDone {
+    _id: string;
+    jobId: IGetJob;
     time: string;
 }
 
@@ -47,6 +59,14 @@ export type IJobDocument = Document & {
     name: string;
     image: string;
     start: number;
+};
+
+export type IHistoryDocument = Document & {
+    userId: string;
+    jobsDone: IJobDone[];
+    totalStars: number;
+    timeGotStars: string;
+    comment: string;
 };
 
 export type ITokenGenerator = {

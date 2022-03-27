@@ -22,9 +22,18 @@ const jobStar = Yup.number()
     .max(100, 'Star can not be bigger than 100')
     .required('Star must be positive number');
 
+// HISTORY
+const comment = Yup.string().max(
+    500,
+    'Short comment cannot be longer than 500 characters!'
+);
+
 export const signupValidate = Yup.object({ name });
+
 export const jobValidate = Yup.object({
     name: jobName,
     image: jobImage,
     star: jobStar,
 });
+
+export const historyValidate = Yup.object({ comment });
