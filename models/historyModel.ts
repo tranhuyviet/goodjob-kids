@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 const { Schema, model, models, Types } = mongoose;
 
 const historySchema = new Schema({
-    user: {
+    userId: {
         type: Types.ObjectId,
-        ref: 'jobs',
+        ref: 'users',
     },
     jobsDone: [
         {

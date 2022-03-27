@@ -10,7 +10,8 @@ const handler = nc();
 
 handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        const { _jobDoneId } = req.query;
+        const { jobId } = req.query;
+        const { time } = req.body;
 
         // connect db
         await db.connect();
@@ -31,18 +32,24 @@ handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
             );
         }
 
-        // filter jobsdone
-        user.jobsDone = user.jobsDone.filter(
-            (jobDone) => jobDone._id!.toString() !== _jobDoneId.toString()
-        );
+        const jobDone: IJobDone = {
+            jobId: Object(jobId),
+            time,
+        };
 
-        // save user
-        await userService.save(user);
+        // add jobdone to array jobsdone and save
+        user.jobsDone.push(jobDone);
+        const updatedUser = await userService.save(user);
+        console.log(updatedUser.jobsDone[updatedUser.jobsDone.length - 1]._id);
 
         // disconnect db
         await db.disconnect();
 
-        return resSuccess(res, user);
+        // return job done id have just added to jobsdone array
+        return resSuccess(res, {
+            jobDoneIdAdded:
+                updatedUser.jobsDone[updatedUser.jobsDone.length - 1]._id,
+        });
     } catch (error) {
         console.log('error', error);
     }

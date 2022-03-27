@@ -6,6 +6,7 @@ export interface ErrorsObject {
 
 // JOB
 export interface IJob {
+    _id?: string;
     name: string;
     image: string;
     star: number;
@@ -13,7 +14,7 @@ export interface IJob {
 
 export interface IJobDone {
     _id?: string;
-    jobDone: string;
+    jobId: string;
     time: string;
 }
 

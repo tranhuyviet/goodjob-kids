@@ -4,14 +4,12 @@ import userService from '../../../../services/userService';
 import db from '../../../../utils/db';
 import { generateAuthenticatedUserId } from '../../../../utils/generate';
 import { resError, resSuccess } from '../../../../utils/returnRes';
-import { IJobDone } from '../../../../utils/types';
 
 const handler = nc();
 
 handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        const { _jobDoneId } = req.query;
-        const { time } = req.body;
+        const { jobDoneId } = req.query;
 
         // connect db
         await db.connect();
@@ -32,19 +30,19 @@ handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
             );
         }
 
-        const jobDone: IJobDone = {
-            jobDone: Object(_jobDoneId),
-            time,
-        };
+        // filter jobsdone
+        user.jobsDone = user.jobsDone.filter(
+            (jobDone) => jobDone._id!.toString() !== jobDoneId.toString()
+        );
 
-        // add jobdone to array jobsdone and save
-        user.jobsDone.push(jobDone);
+        // save user
         await userService.save(user);
 
         // disconnect db
         await db.disconnect();
 
-        return resSuccess(res, user);
+        // return null if delete success
+        return resSuccess(res, null);
     } catch (error) {
         console.log('error', error);
     }
