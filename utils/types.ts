@@ -37,9 +37,14 @@ export interface IJobsDone {
 
 // USER
 export interface IUser {
+    _id: string;
     name: string;
+    userName: string;
     jobsDone?: IJobDone[];
-    totalStars?: number;
+}
+
+export interface ISignup {
+    name: string;
 }
 
 // PARAMS AND DOCUMENT

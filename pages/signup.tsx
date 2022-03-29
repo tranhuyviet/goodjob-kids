@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useFormik } from 'formik'
-import { IUser } from '../utils/types'
+import { ISignup } from '../utils/types'
 import axios from 'axios'
 import ReactLoading from 'react-loading'
 import { useRouter } from 'next/router'
@@ -8,25 +8,26 @@ import cookie from 'js-cookie'
 import { useAppDispatch } from '../redux/hooks'
 import { signup } from '../redux/slices/userSlice'
 import { GetServerSideProps } from 'next'
+import { decodeToken } from '../utils/generate'
+import { decode } from 'jsonwebtoken'
 
 const SignupPage = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const initialValues: IUser = {
+    const initialValues: ISignup = {
         name: ''
     }
 
-    const { values, handleChange, handleSubmit, errors, setErrors } = useFormik<IUser>({ initialValues, onSubmit })
+    const { values, handleChange, handleSubmit, errors, setErrors } = useFormik<ISignup>({ initialValues, onSubmit })
 
-    async function onSubmit(values: IUser) {
+    async function onSubmit(values: ISignup) {
         try {
             setLoading(true)
             const { data } = await axios.post('/users', values)
-
             if (data.status === 'success') {
-                cookie.set('goodjobKids', data.data.name)
-                dispatch(signup(data.data.name))
+                const token = data.data.token
+                cookie.set('goodjobKids', token, { secure: true, sameSite: "strict", path: "/" })
                 router.push('/')
             }
             setLoading(false)
@@ -57,8 +58,9 @@ const SignupPage = () => {
 export default SignupPage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const name = context.req.cookies.goodjobKids
-    if (name) {
+    const token = context.req.cookies.goodjobKids
+    const user = decodeToken(token)
+    if (user) {
         return { redirect: { destination: '/', permanent: false } };
     }
     return {

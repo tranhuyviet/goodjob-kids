@@ -25,11 +25,20 @@ export const generateToken = ({
     return jwt.sign({ _id, name, userName }, secret);
 };
 
+export const decodeToken = (token: string): ITokenGenerator | null => {
+    try {
+        const user = jwt.verify(token, secret) as ITokenGenerator;
+        return user ? user : null;
+    } catch (error) {
+        return null;
+    }
+};
+
 export const generateAuthenticatedUserId = (
     req: NextApiRequest
 ): string | null => {
     const token = req.cookies.goodjobKids as string;
-    const user = jwt.verify(token, secret) as ITokenGenerator;
+    const user = decodeToken(token);
     if (user && user._id) {
         return user._id;
     } else {
