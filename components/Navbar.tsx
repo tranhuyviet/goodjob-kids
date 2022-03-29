@@ -6,7 +6,7 @@ import { useAppSelector } from '../redux/hooks';
 
 const Navbar = () => {
     const { pathname } = useRouter()
-    const totalStars = 0// useAppSelector(state => state.user.totalStars)
+    const totalStars = useAppSelector(state => state.user.totalStars)
     const username = useAppSelector(state => state.user.name)
     return (
         <nav className="h-[68px] container flex justify-between items-center bg-gray-100 shadow-md">

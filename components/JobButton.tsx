@@ -1,12 +1,12 @@
 import Image from 'next/image'
 import { Dispatch, SetStateAction } from 'react'
 import { useAppDispatch } from '../redux/hooks'
-import { IGetJob, IJobDone } from '../utils/types'
+import { IJob, IJobDone, IJobDonePopulated } from '../utils/types'
 import axios from 'axios'
 import { addJob } from '../redux/slices/userSlice'
 
 interface IJobButton {
-    job: IGetJob,
+    job: IJob,
     setIsOpenDialog: Dispatch<SetStateAction<boolean>>
 }
 
@@ -16,11 +16,14 @@ const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
         try {
             const { data } = await axios.put(`/users/add-job-done/${job._id}`, { time: Date.now() })
             console.log(data.data.jobDoneIdAdded);
-            const newJobDone = {
-                jobDoneId: data.data.jobDoneId,
-                name: job.name,
-                image: job.image,
-                star: job.star
+            const newJobDone: IJobDonePopulated = {
+                _id: data.data.jobDoneId,
+                jobId: {
+                    name: job.name,
+                    image: job.image,
+                    star: job.star
+                },
+                time: Date.now().toString()
             }
             dispatch(addJob(newJobDone))
             setIsOpenDialog(true)

@@ -6,7 +6,7 @@ export interface ErrorsObject {
 
 // JOB
 export interface IJob {
-    _id: string;
+    _id?: string;
     name: string;
     image: string;
     star: number;
@@ -26,26 +26,6 @@ export interface IJobDonePopulated {
 
 export type IJobBody = Omit<IJob, '_id'>;
 export type IJobDoneBody = Omit<IJobDone, '_id'>;
-
-// export interface IGetJob {
-//     _id: string;
-//     name: string;
-//     image: string;
-//     star: number;
-// }
-
-// export interface IGetJobDone {
-//     _id: string;
-//     jobId: IGetJob;
-//     time: string;
-// }
-
-// export interface IJobsDone {
-//     jobDoneId: string;
-//     name: string;
-//     image: string;
-//     star: number;
-// }
 
 // USER
 export interface IUser {
@@ -94,10 +74,3 @@ export type IUserDocument = Document &
     };
 
 export type IHistoryDocument = Document & IHistoryBody;
-
-// export type ITokenGenerator = {
-//     _id: string;
-//     name: string;
-//     userName: string;
-//     iat?: number;
-// };

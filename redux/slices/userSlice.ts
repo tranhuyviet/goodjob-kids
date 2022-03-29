@@ -1,23 +1,15 @@
-import { IJobsDone } from './../../utils/types';
+import { IJobDonePopulated, IUserWithJobsDone } from './../../utils/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '../../utils/types';
 import { calculateStars } from '../../utils/generate';
 
-const initialState: IUser = {
+const initialState: IUserWithJobsDone = {
     _id: '',
     name: '',
     userName: '',
-    jobsDone: <IJobsDone[]>[],
+    jobsDone: [],
     totalStars: 0,
 };
-
-// const calculateStars = (jobsDone: IJobDone[]): number => {
-//     let totalStars = 0;
-//     for (const jobDone of jobsDone) {
-//         totalStars += jobDone.star;
-//     }
-//     return totalStars;
-// };
 
 const userSlice = createSlice({
     name: 'user',
@@ -28,14 +20,9 @@ const userSlice = createSlice({
             state.name = action.payload.name;
             state.userName = action.payload.userName;
         },
-        addJob: (state, action: PayloadAction<IJobsDone>) => {
+        addJob: (state, action: PayloadAction<IJobDonePopulated>) => {
             state.jobsDone = [...state.jobsDone!, action.payload];
             state.totalStars = calculateStars(state.jobsDone);
-            // state.jobsDone = [
-            //     ...(state.jobsDone as IJobDone[]),
-            //     action.payload,
-            // ];
-            // state.totalStars = calculateStars(state.jobsDone);
         },
         // removeJob: (state, action: PayloadAction<{ jobDoneId: string }>) => {
         //     state.jobsDone =

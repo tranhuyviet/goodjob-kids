@@ -51,7 +51,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
                 // select: 'name image star',
             },
         });
-        console.log(user);
+
         const userId = user._id;
         const jobsDone = user.jobsDone;
         const totalStars = calculateStars(jobsDone as any);
