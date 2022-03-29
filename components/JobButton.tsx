@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { Dispatch, SetStateAction } from 'react'
 import { useAppDispatch } from '../redux/hooks'
-import { addJob } from '../redux/slices/userSlice'
 import { IJob, IJobDone } from '../utils/types'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'

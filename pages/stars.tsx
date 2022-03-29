@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { IUser } from "../utils/types";
-import { signup, removeJob } from '../redux/slices/userSlice'
+import { signup, } from '../redux/slices/userSlice'
 import { decodeToken } from "../utils/generate";
 
 interface IRemoveJobVariables {
@@ -19,34 +19,34 @@ const StarsPage: NextPage<{ user: IUser }> = ({ user }) => {
         dispatch(signup(user))
     }
 
-    const { jobsDone, totalStars } = useAppSelector(state => state.user)
-    const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
-    const initialVariables: IRemoveJobVariables = {
-        jobDoneName: undefined,
-        jobDoneId: undefined,
-    }
-    const [variables, setVariables] = useState<IRemoveJobVariables>(initialVariables)
+    // const { jobsDone, totalStars } = useAppSelector(state => state.user)
+    // const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
+    // const initialVariables: IRemoveJobVariables = {
+    //     jobDoneName: undefined,
+    //     jobDoneId: undefined,
+    // }
+    // const [variables, setVariables] = useState<IRemoveJobVariables>(initialVariables)
 
-    const handleRemoveJob = ({ jobDoneName, jobDoneId }: IRemoveJobVariables): void => {
-        setIsOpenConfirmDialog(true)
-        setVariables({ jobDoneName, jobDoneId })
-    }
+    // const handleRemoveJob = ({ jobDoneName, jobDoneId }: IRemoveJobVariables): void => {
+    //     setIsOpenConfirmDialog(true)
+    //     setVariables({ jobDoneName, jobDoneId })
+    // }
 
-    const confirmYesRemoveJob = (): void => {
-        if (variables.jobDoneId) {
-            dispatch(removeJob({ jobDoneId: variables.jobDoneId }))
-        }
-        setIsOpenConfirmDialog(false)
-        setVariables(initialVariables)
-    }
+    // const confirmYesRemoveJob = (): void => {
+    //     if (variables.jobDoneId) {
+    //         dispatch(removeJob({ jobDoneId: variables.jobDoneId }))
+    //     }
+    //     setIsOpenConfirmDialog(false)
+    //     setVariables(initialVariables)
+    // }
 
-    const confirmNoRemoveJob = (): void => {
-        setIsOpenConfirmDialog(false)
-        setVariables(initialVariables)
-    }
+    // const confirmNoRemoveJob = (): void => {
+    //     setIsOpenConfirmDialog(false)
+    //     setVariables(initialVariables)
+    // }
     return (
         <div className="container min-h-[calc(100vh-68px)] shadow-md pt-6">
-            {jobsDone && jobsDone.length > 0 && (
+            {/* {jobsDone && jobsDone.length > 0 && (
                 <>
                     <div className="shadow-md">
                         <div className="grid grid-cols-12 border bg-yellow-400 py-3 rounded-t-xl">
@@ -75,8 +75,8 @@ const StarsPage: NextPage<{ user: IUser }> = ({ user }) => {
                         <button className="hover:text-green-400 hover:border-green-400 hover:shadow-xl transition-all duration-300 border-green-600 border text-green-600 py-2 px-5 rounded-lg shadow-md tracking-wider flex items-center"><Image src="/images/pickup.png" className="rotate-12" width={36} height={36} alt="mop" /><span className="block ml-2 text-lg ">{`Pickup ${totalStars} Stars`}</span></button>
                     </div>
                 </>
-            )}
-            {jobsDone && jobsDone.length === 0 && <p className="text-center text-xl mt-4">You have not finished any job yet</p>}
+            )} */}
+            {/* {jobsDone && jobsDone.length === 0 && <p className="text-center text-xl mt-4">You have not finished any job yet</p>}
             {isOpenConfirmDialog && (
                 <div className="absolute inset-0 container max-h-screen flex items-center justify-center backdrop-brightness-[.4]" onClick={confirmNoRemoveJob}>
                     <div className="w-3/4 h-[160px] bg-green-200 text-center rounded-3xl shadow-2xl">
@@ -88,7 +88,7 @@ const StarsPage: NextPage<{ user: IUser }> = ({ user }) => {
                         </div>
                     </div>
                 </div>
-            )}
+            )} */}
         </div>
     )
 }
