@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import JobButton from '../components/JobButton'
 import Image from 'next/image'
-import { useAppDispatch } from '../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { signup } from '../redux/slices/userSlice'
 import { IJob, IUser } from '../utils/types'
 import { decodeToken } from '../utils/generate'
@@ -16,13 +16,9 @@ const Home: NextPage<{ user: IUser }> = ({ user }) => {
   if (user) {
     dispatch(signup(user))
   }
-  const { data, error } = useSWR('/jobs', fetchApi)
-  const [isOpenDialog, setIsOpenDialog] = useState(false)
-  let jobs: IJob[] = [];
 
-  if (data) {
-    jobs = data.data.jobs
-  }
+  const jobs = useAppSelector(state => state.jobs.jobs)
+  const [isOpenDialog, setIsOpenDialog] = useState(false)
 
   useEffect(() => {
     if (isOpenDialog) {
@@ -32,7 +28,7 @@ const Home: NextPage<{ user: IUser }> = ({ user }) => {
     }
   }, [isOpenDialog])
 
-  if (error) return <p>Something went wrong... please try again</p>
+  console.log('INDEX PAGE -  RENDER')
 
   return (
     <div className="container min-h-[calc(100vh-68px)] shadow-md">
@@ -41,7 +37,6 @@ const Home: NextPage<{ user: IUser }> = ({ user }) => {
         <meta name="description" content="Good Job Kids" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <Title name={"Kit"} /> */}
       <div className="h-full pt-6">
         <div className="grid grid-cols-2 gap-4 place-items-center">
           {jobs && jobs.map((job) => (

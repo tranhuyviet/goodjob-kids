@@ -8,6 +8,8 @@ const Navbar = () => {
     const { pathname } = useRouter()
     const user = useAppSelector(state => state.user)
 
+    console.log('NAVBAR - RENDER')
+
     return (
         <nav className="h-[68px] container flex justify-between items-center bg-gray-100 shadow-md">
             <div className="flex gap-x-4">

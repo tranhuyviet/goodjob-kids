@@ -12,6 +12,7 @@ interface IJobButton {
 
 const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
     const dispatch = useAppDispatch()
+
     const handleJobClick = async () => {
         try {
             const { data } = await axios.put(`/users/add-job-done/${job._id}`, { time: Date.now() })
@@ -30,6 +31,9 @@ const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
             console.log('AAAA', error)
         }
     }
+
+    console.log('JOBBUTTON - RENDER')
+
     return (
         <div className="shadow-lg w-full min-h-[160px] flex items-center justify-center relative rounded-2xl bg-green-100 hover:cursor-pointer" onClick={handleJobClick}>
             <div className="flex flex-col items-center justify-center p-4">

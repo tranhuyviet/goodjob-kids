@@ -4,32 +4,37 @@ import { useAppDispatch } from '../redux/hooks'
 import useSWR from 'swr'
 import fetchApi from '../utils/fetchApi'
 import { setJobsDone } from '../redux/slices/userSlice'
+import { setJobs } from '../redux/slices/jobSlice'
 
 interface IProps {
     children: ReactChild
 }
 
 const Layout = ({ children }: IProps) => {
-    const { data, error } = useSWR('/users/jobs-done', fetchApi)
+    const { data: userData, error: errorUser } = useSWR('/users/jobs-done', fetchApi)
+    const { data: jobsData, error: errorJobs } = useSWR('/jobs', fetchApi)
     const dispatch = useAppDispatch()
 
-
     useEffect(() => {
-        if (data) {
-            dispatch(setJobsDone(data.data.jobsDone))
+        if (userData) {
+            dispatch(setJobsDone(userData.data.jobsDone))
         }
-    }, [data, dispatch]);
+        if (jobsData) {
+            console.log('KKKK', jobsData.data.jobs)
+            dispatch(setJobs(jobsData.data.jobs))
+        }
+    }, [userData, jobsData, dispatch]);
 
-    if (error) return <p>Something went wrong.</p>
+    if (errorUser || errorJobs) return <p>Something went wrong.</p>
+
+    console.log('LAYOUT - RENDER')
 
     return (
         <div className="relative">
-            {data && <>
-                <Navbar />
-                <div>
-                    {children}
-                </div>
-            </>}
+            <Navbar />
+            <div>
+                {children}
+            </div>
         </div>
     )
 }
