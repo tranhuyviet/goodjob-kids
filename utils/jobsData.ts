@@ -1,6 +1,6 @@
-import { IGetJob } from './types';
+import { IJob } from './types';
 
-export const jobs: IGetJob[] = [
+export const jobs: IJob[] = [
     {
         _id: '1',
         name: 'House Cleaning dadsf asdf asdfdd',

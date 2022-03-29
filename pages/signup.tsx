@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useFormik } from 'formik'
-import { ISignup } from '../utils/types'
+import { ISignupBody } from '../utils/types'
 import axios from 'axios'
 import ReactLoading from 'react-loading'
 import { useRouter } from 'next/router'
@@ -15,13 +15,13 @@ const SignupPage = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const initialValues: ISignup = {
+    const initialValues: ISignupBody = {
         name: ''
     }
 
-    const { values, handleChange, handleSubmit, errors, setErrors } = useFormik<ISignup>({ initialValues, onSubmit })
+    const { values, handleChange, handleSubmit, errors, setErrors } = useFormik<ISignupBody>({ initialValues, onSubmit })
 
-    async function onSubmit(values: ISignup) {
+    async function onSubmit(values: ISignupBody) {
         try {
             setLoading(true)
             const { data } = await axios.post('/users', values)
