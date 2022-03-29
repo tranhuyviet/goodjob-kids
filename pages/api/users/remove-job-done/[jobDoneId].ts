@@ -9,12 +9,10 @@ const handler = nc();
 
 handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        const { jobDoneId } = req.query;
-
         // connect db
         await db.connect();
 
-        // find the user
+        // find the authenticated user
         const user = await userService.findUserByUserId(
             generateAuthenticatedUserId(req) as string
         );
@@ -22,13 +20,15 @@ handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
         if (!user) {
             return resError(
                 res,
-                'Not Found',
+                'Unauthorized',
                 {
-                    global: 'User not found',
+                    global: 'You have no permission.',
                 },
-                404
+                401
             );
         }
+
+        const { jobDoneId } = req.query;
 
         // filter jobsdone
         user.jobsDone = user.jobsDone.filter(

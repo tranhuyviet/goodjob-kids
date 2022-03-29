@@ -2,8 +2,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
 import Job from '../../../models/jobModel';
 import jobService from '../../../services/jobService';
+import userService from '../../../services/userService';
 import db from '../../../utils/db';
 import { errorParse } from '../../../utils/errorParse';
+import { generateAuthenticatedUserId } from '../../../utils/generate';
 import { resError, resSuccess } from '../../../utils/returnRes';
 import { IJobDocument } from '../../../utils/types';
 import { jobValidate } from '../../../utils/validate';
@@ -13,6 +15,25 @@ const handler = nc();
 // add new job
 handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
+        // connect db
+        await db.connect();
+
+        // find the authenticated user
+        const user = await userService.findUserByUserId(
+            generateAuthenticatedUserId(req) as string
+        );
+
+        if (!user) {
+            return resError(
+                res,
+                'Unauthorized',
+                {
+                    global: 'You have no permission.',
+                },
+                401
+            );
+        }
+
         const { name, image, star } = req.body;
 
         // validate job
@@ -20,9 +41,6 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
             { name, image, star },
             { abortEarly: false }
         );
-
-        // connect db
-        await db.connect();
 
         // checking dublicate job
         const isExistJob = await jobService.findJobByName(

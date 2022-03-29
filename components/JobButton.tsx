@@ -1,12 +1,12 @@
 import Image from 'next/image'
 import { Dispatch, SetStateAction } from 'react'
 import { useAppDispatch } from '../redux/hooks'
-import { IJob, IJobDone } from '../utils/types'
-import { v4 as uuidv4 } from 'uuid'
+import { IGetJob, IJobDone } from '../utils/types'
 import axios from 'axios'
+import { addJob } from '../redux/slices/userSlice'
 
 interface IJobButton {
-    job: IJob,
+    job: IGetJob,
     setIsOpenDialog: Dispatch<SetStateAction<boolean>>
 }
 
@@ -14,18 +14,19 @@ const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
     const dispatch = useAppDispatch()
     const handleJobClick = async () => {
         try {
+            const { data } = await axios.put(`/users/add-job-done/${job._id}`, { time: Date.now() })
+            console.log(data.data.jobDoneIdAdded);
             const newJobDone = {
-                ...job,
-                time: String(Date.now()),
+                jobDoneId: data.data.jobDoneId,
+                name: job.name,
+                image: job.image,
+                star: job.star
             }
-            const { data } = await axios.put('/users/name', newJobDone)
-            console.log(data);
-            // dispatch(addJob(newJobDone))
+            dispatch(addJob(newJobDone))
             setIsOpenDialog(true)
         } catch (error) {
             console.log('AAAA', error)
         }
-
     }
     return (
         <div className="shadow-lg w-full min-h-[160px] flex items-center justify-center relative rounded-2xl bg-green-100 hover:cursor-pointer" onClick={handleJobClick}>

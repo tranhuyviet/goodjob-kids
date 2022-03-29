@@ -32,7 +32,6 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         const newUser: IUserDocument = new User({
             name: name.trim(),
             userName,
-            jobsDone: [],
         });
 
         // save user to database

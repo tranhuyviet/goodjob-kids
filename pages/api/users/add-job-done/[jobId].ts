@@ -4,15 +4,12 @@ import userService from '../../../../services/userService';
 import db from '../../../../utils/db';
 import { generateAuthenticatedUserId } from '../../../../utils/generate';
 import { resError, resSuccess } from '../../../../utils/returnRes';
-import { IJobDone } from '../../../../utils/types';
+import { IJobDoneBody } from '../../../../utils/types';
 
 const handler = nc();
 
 handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        const { jobId } = req.query;
-        const { time } = req.body;
-
         // connect db
         await db.connect();
 
@@ -24,32 +21,32 @@ handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
         if (!user) {
             return resError(
                 res,
-                'Not Found',
+                'Unauthorized',
                 {
-                    global: 'User not found',
+                    global: 'You have no permission.',
                 },
-                404
+                401
             );
         }
 
-        const jobDone: IJobDone = {
+        const { jobId } = req.query;
+        const { time } = req.body;
+
+        const jobDone: IJobDoneBody = {
             jobId: Object(jobId),
             time,
         };
-        console.log(jobDone);
 
         // add jobdone to array jobsdone and save
         user.jobsDone.push(jobDone);
-        console.log(user.jobsDone);
         const updatedUser = await userService.save(user);
-        console.log(updatedUser.jobsDone[updatedUser.jobsDone.length - 1]._id);
 
         // disconnect db
         await db.disconnect();
 
         // return job done id have just added to jobsdone array
         return resSuccess(res, {
-            jobDoneIdAdded:
+            jobDoneId:
                 updatedUser.jobsDone[updatedUser.jobsDone.length - 1]._id,
         });
     } catch (error) {

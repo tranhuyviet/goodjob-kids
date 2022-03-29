@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { NextApiRequest } from 'next';
-import { IGetJobDone, IJobDone, ITokenGenerator } from './types';
+import { IJobDonePopulated, IUser } from './types';
 
 const secret = process.env.JWT_SECRET as string;
 
@@ -17,17 +17,13 @@ export const generateUserName = (name: string): string => {
     return `${name}#${generateRandomNumber(1000, 9999)}`;
 };
 
-export const generateToken = ({
-    _id,
-    name,
-    userName,
-}: ITokenGenerator): string => {
+export const generateToken = ({ _id, name, userName }: IUser): string => {
     return jwt.sign({ _id, name, userName }, secret);
 };
 
-export const decodeToken = (token: string): ITokenGenerator | null => {
+export const decodeToken = (token: string): IUser | null => {
     try {
-        const user = jwt.verify(token, secret) as ITokenGenerator;
+        const user = jwt.verify(token, secret) as IUser;
         return user ? user : null;
     } catch (error) {
         return null;
@@ -46,7 +42,7 @@ export const generateAuthenticatedUserId = (
     }
 };
 
-export const calculateStars = (jobsDone: IGetJobDone[]): number => {
+export const calculateStars = (jobsDone: IJobDonePopulated[]): number => {
     let totalStars = 0;
     for (const jobDone of jobsDone) {
         totalStars += jobDone.jobId.star;

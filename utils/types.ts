@@ -6,6 +6,7 @@ export interface ErrorsObject {
 
 // JOB
 export interface IJob {
+    _id: string;
     name: string;
     image: string;
     star: number;
@@ -17,66 +18,86 @@ export interface IJobDone {
     time: string;
 }
 
-export interface IGetJob {
+export interface IJobDonePopulated {
     _id: string;
-    name: string;
-    image: string;
-    star: number;
-}
-
-export interface IGetJobDone {
-    _id: string;
-    jobId: IGetJob;
+    jobId: IJob;
     time: string;
 }
 
-export interface IJobsDone {
-    jobsDone: IJobDone[];
-    totalStars: number;
-}
+export type IJobBody = Omit<IJob, '_id'>;
+export type IJobDoneBody = Omit<IJobDone, '_id'>;
+
+// export interface IGetJob {
+//     _id: string;
+//     name: string;
+//     image: string;
+//     star: number;
+// }
+
+// export interface IGetJobDone {
+//     _id: string;
+//     jobId: IGetJob;
+//     time: string;
+// }
+
+// export interface IJobsDone {
+//     jobDoneId: string;
+//     name: string;
+//     image: string;
+//     star: number;
+// }
 
 // USER
 export interface IUser {
     _id: string;
     name: string;
     userName: string;
-    jobsDone?: IJobDone[];
 }
 
-export interface ISignup {
+export interface IUserWithJobsDone extends IUser {
+    jobsDone: IJobDonePopulated[];
+    totalStars: number;
+}
+
+export interface ISignupBody {
     name: string;
 }
 
-// PARAMS AND DOCUMENT
-export type IJobParams = Document & {
-    name: string;
-    image: string;
-    start: number;
-};
-
-export type IUserDocument = Document & {
-    name: string;
-    jobsDone: IJobDone[];
-    returnToken: () => string;
-};
-
-export type IJobDocument = Document & {
-    name: string;
-    image: string;
-    start: number;
-};
-
-export type IHistoryDocument = Document & {
+// HISTORY
+export interface IHistory {
+    _id: string;
     userId: string;
     jobsDone: IJobDone[];
     totalStars: number;
     timeGotStars: string;
     comment: string;
+}
+
+export type IHistoryBody = Omit<IHistory, '_id'>;
+
+export type IHistoryPopulated = {
+    _id: string;
+    userId: string;
+    jobsDone: IJobDonePopulated[];
+    totalStars: number;
+    timeGotStars: string;
+    comment: string;
 };
 
-export type ITokenGenerator = {
-    _id: string;
-    name: string;
-    userName: string;
-    iat?: number;
-};
+// DOCUMENT
+export type IJobDocument = Document & IJobBody;
+
+export type IUserDocument = Document &
+    IUser & {
+        jobsDone: IJobDone[];
+        returnToken: () => string;
+    };
+
+export type IHistoryDocument = Document & IHistoryBody;
+
+// export type ITokenGenerator = {
+//     _id: string;
+//     name: string;
+//     userName: string;
+//     iat?: number;
+// };

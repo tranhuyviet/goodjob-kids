@@ -1,12 +1,14 @@
-import { IJobDone } from './../../utils/types';
+import { IJobsDone } from './../../utils/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '../../utils/types';
+import { calculateStars } from '../../utils/generate';
 
 const initialState: IUser = {
     _id: '',
     name: '',
     userName: '',
-    jobsDone: [],
+    jobsDone: <IJobsDone[]>[],
+    totalStars: 0,
 };
 
 // const calculateStars = (jobsDone: IJobDone[]): number => {
@@ -26,13 +28,15 @@ const userSlice = createSlice({
             state.name = action.payload.name;
             state.userName = action.payload.userName;
         },
-        // addJob: (state, action: PayloadAction<IJobDone>) => {
-        //     state.jobsDone = [
-        //         ...(state.jobsDone as IJobDone[]),
-        //         action.payload,
-        //     ];
-        //     state.totalStars = calculateStars(state.jobsDone);
-        // },
+        addJob: (state, action: PayloadAction<IJobsDone>) => {
+            state.jobsDone = [...state.jobsDone!, action.payload];
+            state.totalStars = calculateStars(state.jobsDone);
+            // state.jobsDone = [
+            //     ...(state.jobsDone as IJobDone[]),
+            //     action.payload,
+            // ];
+            // state.totalStars = calculateStars(state.jobsDone);
+        },
         // removeJob: (state, action: PayloadAction<{ jobDoneId: string }>) => {
         //     state.jobsDone =
         //         state.jobsDone &&
@@ -44,5 +48,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { signup } = userSlice.actions;
+export const { signup, addJob } = userSlice.actions;
 export default userSlice.reducer;
