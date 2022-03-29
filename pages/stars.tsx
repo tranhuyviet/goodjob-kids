@@ -5,17 +5,18 @@ import { useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { IUser } from "../utils/types";
 import { signup, removeJob } from '../redux/slices/userSlice'
+import { decodeToken } from "../utils/generate";
 
 interface IRemoveJobVariables {
     jobDoneName?: string
     jobDoneId?: string
 }
 
-const StarsPage: NextPage<IUser> = ({ name }) => {
+const StarsPage: NextPage<{ user: IUser }> = ({ user }) => {
 
     const dispatch = useAppDispatch()
-    if (name) {
-        dispatch(signup(name))
+    if (user) {
+        dispatch(signup(user))
     }
 
     const { jobsDone, totalStars } = useAppSelector(state => state.user)
@@ -95,12 +96,14 @@ const StarsPage: NextPage<IUser> = ({ name }) => {
 export default StarsPage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const name = context.req.cookies.goodjobKids
-    if (!name) return { redirect: { destination: '/signup', permanent: false } };
+    const token = context.req.cookies.goodjobKids
+    const user = decodeToken(token)
+
+    if (!user) return { redirect: { destination: '/signup', permanent: false } };
 
     return {
         props: {
-            name
+            user
         }
     }
 }

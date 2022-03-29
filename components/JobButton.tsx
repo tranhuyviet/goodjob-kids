@@ -15,11 +15,6 @@ const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
     const dispatch = useAppDispatch()
     const handleJobClick = async () => {
         try {
-            // const newJobDone: IJobDone = {
-            //     ...job,
-            //     time: String(Date.now()),
-            //     jobDoneId: uuidv4()
-            // }
             const newJobDone = {
                 ...job,
                 time: String(Date.now()),
@@ -37,7 +32,7 @@ const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
         <div className="shadow-lg w-full min-h-[160px] flex items-center justify-center relative rounded-2xl bg-green-100 hover:cursor-pointer" onClick={handleJobClick}>
             <div className="flex flex-col items-center justify-center p-4">
                 <Image src={job.image} className="job-icons" width={70} height={70} alt="mop" />
-                <p className="mt-2 text-lg">{job.name}</p>
+                <p className="mt-2 text-lg capitalize">{job.name}</p>
             </div>
             <div className="absolute right-2 top-2">
                 <div className="relative animate-pulse">

@@ -2,12 +2,13 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import JobButton from '../components/JobButton'
-import { jobs } from '../utils/jobsData'
 import Image from 'next/image'
 import { useAppDispatch } from '../redux/hooks'
 import { signup } from '../redux/slices/userSlice'
-import { IUser } from '../utils/types'
+import { IGetJob, IUser } from '../utils/types'
 import { decodeToken } from '../utils/generate'
+import useSWR from 'swr'
+import fetchApi from '../utils/fetchApi'
 
 const Home: NextPage<{ user: IUser }> = ({ user }) => {
 
@@ -15,8 +16,13 @@ const Home: NextPage<{ user: IUser }> = ({ user }) => {
   if (user) {
     dispatch(signup(user))
   }
-
+  const { data, error } = useSWR('/jobs', fetchApi)
   const [isOpenDialog, setIsOpenDialog] = useState(false)
+  let jobs: IGetJob[] = [];
+
+  if (data) {
+    jobs = data.data.jobs
+  }
 
   useEffect(() => {
     if (isOpenDialog) {
@@ -25,6 +31,8 @@ const Home: NextPage<{ user: IUser }> = ({ user }) => {
       }, 2000)
     }
   }, [isOpenDialog])
+
+  if (error) return <p>Something went wrong... please try again</p>
 
   return (
     <div className="container min-h-[calc(100vh-68px)] shadow-md">
@@ -36,8 +44,8 @@ const Home: NextPage<{ user: IUser }> = ({ user }) => {
       {/* <Title name={"Kit"} /> */}
       <div className="h-full pt-6">
         <div className="grid grid-cols-2 gap-4 place-items-center">
-          {jobs && jobs.map((job, index) => (
-            <JobButton key={index} job={job} setIsOpenDialog={setIsOpenDialog} />
+          {jobs && jobs.map((job) => (
+            <JobButton key={job._id} job={job} setIsOpenDialog={setIsOpenDialog} />
           ))}
         </div>
         {isOpenDialog && (

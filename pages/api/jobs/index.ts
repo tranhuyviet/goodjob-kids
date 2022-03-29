@@ -70,4 +70,32 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     }
 });
 
+// get all jobs
+handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+        // connect db
+        await db.connect();
+
+        const jobs = await jobService.getJobs();
+
+        // disconnect db
+        await db.disconnect();
+
+        // return jobs
+        return resSuccess(res, { jobs });
+    } catch (error) {
+        if (error instanceof Error && error.name == 'ValidationError') {
+            const errors = errorParse(error);
+            resError(res, 'Bad Request Error - Validate Input', errors, 400);
+        } else {
+            resError(
+                res,
+                'Something went wrong',
+                { global: 'Something went wrong' },
+                500
+            );
+        }
+    }
+});
+
 export default handler;
