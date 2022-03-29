@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { Dispatch, SetStateAction } from 'react'
 import { useAppDispatch } from '../redux/hooks'
-import { IJob, IJobDone, IJobDonePopulated } from '../utils/types'
+import { IJob, IJobDonePopulated } from '../utils/types'
 import axios from 'axios'
 import { addJob } from '../redux/slices/userSlice'
 
@@ -15,7 +15,6 @@ const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
     const handleJobClick = async () => {
         try {
             const { data } = await axios.put(`/users/add-job-done/${job._id}`, { time: Date.now() })
-            console.log(data.data.jobDoneIdAdded);
             const newJobDone: IJobDonePopulated = {
                 _id: data.data.jobDoneId,
                 jobId: {

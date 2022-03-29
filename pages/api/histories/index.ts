@@ -48,7 +48,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
             populate: {
                 path: 'jobId',
                 model: Job,
-                // select: 'name image star',
+                select: 'name image star',
             },
         });
 

@@ -4,7 +4,10 @@ import User from '../../../models/userModel';
 import userService from '../../../services/userService';
 import db from '../../../utils/db';
 import { errorParse } from '../../../utils/errorParse';
-import { generateUserName } from '../../../utils/generate';
+import {
+    generateAuthenticatedUserId,
+    generateUserName,
+} from '../../../utils/generate';
 import { resError, resSuccess } from '../../../utils/returnRes';
 import { IUserDocument } from '../../../utils/types';
 import { signupValidate } from '../../../utils/validate';
@@ -42,6 +45,48 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
 
         // return new user
         return resSuccess(res, { token: user.returnToken() });
+    } catch (error) {
+        if (error instanceof Error && error.name == 'ValidationError') {
+            const errors = errorParse(error);
+            resError(res, 'Bad Request Error - Validate Input', errors, 400);
+        } else {
+            resError(
+                res,
+                'Something went wrong',
+                { global: 'Something went wrong' },
+                500
+            );
+        }
+    }
+});
+
+// get user by id
+handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+        // connect db
+        await db.connect();
+
+        // find the authenticated user
+        const user = await userService.findUserByUserId(
+            generateAuthenticatedUserId(req) as string
+        );
+
+        if (!user) {
+            return resError(
+                res,
+                'Unauthorized',
+                {
+                    global: 'You have no permission.',
+                },
+                401
+            );
+        }
+
+        // disconnect db
+        await db.disconnect();
+
+        // return user
+        return resSuccess(res, { user });
     } catch (error) {
         if (error instanceof Error && error.name == 'ValidationError') {
             const errors = errorParse(error);

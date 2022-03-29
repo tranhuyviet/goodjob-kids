@@ -20,10 +20,17 @@ const userSlice = createSlice({
             state.name = action.payload.name;
             state.userName = action.payload.userName;
         },
+
+        setJobsDone: (state, action: PayloadAction<IJobDonePopulated[]>) => {
+            state.jobsDone = [...action.payload];
+            state.totalStars = calculateStars(state.jobsDone);
+        },
+
         addJob: (state, action: PayloadAction<IJobDonePopulated>) => {
             state.jobsDone = [...state.jobsDone!, action.payload];
             state.totalStars = calculateStars(state.jobsDone);
         },
+
         // removeJob: (state, action: PayloadAction<{ jobDoneId: string }>) => {
         //     state.jobsDone =
         //         state.jobsDone &&
@@ -35,5 +42,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { signup, addJob } = userSlice.actions;
+export const { signup, setJobsDone, addJob } = userSlice.actions;
 export default userSlice.reducer;
