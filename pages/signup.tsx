@@ -5,16 +5,12 @@ import axios from 'axios'
 import ReactLoading from 'react-loading'
 import { useRouter } from 'next/router'
 import cookie from 'js-cookie'
-import { useAppDispatch } from '../redux/hooks'
-import { signup } from '../redux/slices/userSlice'
 import { GetServerSideProps } from 'next'
 import { decodeToken } from '../utils/generate'
-import { decode } from 'jsonwebtoken'
 
 const SignupPage = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
-    const dispatch = useAppDispatch()
     const initialValues: ISignupBody = {
         name: ''
     }
@@ -59,8 +55,8 @@ export default SignupPage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const token = context.req.cookies.goodjobKids
-    const user = decodeToken(token)
-    if (user) {
+    const userId = decodeToken(token)
+    if (userId) {
         return { redirect: { destination: '/', permanent: false } };
     }
     return {

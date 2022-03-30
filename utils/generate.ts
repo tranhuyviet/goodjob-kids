@@ -17,14 +17,14 @@ export const generateUserName = (name: string): string => {
     return `${name}#${generateRandomNumber(1000, 9999)}`;
 };
 
-export const generateToken = ({ _id, name, userName }: IUser): string => {
-    return jwt.sign({ _id, name, userName }, secret);
+export const generateToken = (userId: string): string => {
+    return jwt.sign(userId, secret);
 };
 
-export const decodeToken = (token: string): IUser | null => {
+export const decodeToken = (token: string): string | null => {
     try {
-        const user = jwt.verify(token, secret) as IUser;
-        return user ? user : null;
+        const userId = jwt.verify(token, secret) as string;
+        return userId ? userId : null;
     } catch (error) {
         return null;
     }
@@ -34,12 +34,8 @@ export const generateAuthenticatedUserId = (
     req: NextApiRequest
 ): string | null => {
     const token = req.cookies.goodjobKids as string;
-    const user = decodeToken(token);
-    if (user && user._id) {
-        return user._id;
-    } else {
-        return null;
-    }
+    const userId = decodeToken(token);
+    return userId ? userId : null;
 };
 
 export const calculateStars = (jobsDone: IJobDonePopulated[]): number => {

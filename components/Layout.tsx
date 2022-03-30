@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 import { useAppDispatch } from '../redux/hooks'
 import useSWR from 'swr'
 import fetchApi from '../utils/fetchApi'
-import { setJobsDone } from '../redux/slices/userSlice'
+import { setUserLoggedIn } from '../redux/slices/userSlice'
 import { setJobs } from '../redux/slices/jobSlice'
 
 interface IProps {
@@ -11,16 +11,15 @@ interface IProps {
 }
 
 const Layout = ({ children }: IProps) => {
-    const { data: userData, error: errorUser } = useSWR('/users/jobs-done', fetchApi)
+    const { data: userData, error: errorUser } = useSWR('/users', fetchApi)
     const { data: jobsData, error: errorJobs } = useSWR('/jobs', fetchApi)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (userData) {
-            dispatch(setJobsDone(userData.data.jobsDone))
+            dispatch(setUserLoggedIn(userData.data.user))
         }
         if (jobsData) {
-            console.log('KKKK', jobsData.data.jobs)
             dispatch(setJobs(jobsData.data.jobs))
         }
     }, [userData, jobsData, dispatch]);

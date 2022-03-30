@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
+import Job from '../../../models/jobModel';
 import User from '../../../models/userModel';
 import userService from '../../../services/userService';
 import db from '../../../utils/db';
@@ -81,6 +82,15 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
                 401
             );
         }
+
+        await user.populate({
+            path: 'jobsDone',
+            populate: {
+                path: 'jobId',
+                model: Job,
+                select: 'name image star',
+            },
+        });
 
         // disconnect db
         await db.disconnect();

@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import { Dispatch, SetStateAction } from 'react'
-import { useAppDispatch } from '../redux/hooks'
-import { IJob, IJobDonePopulated } from '../utils/types'
+import { useAppDispatch } from '../../redux/hooks'
+import { IJob, IJobDonePopulated } from '../../utils/types'
 import axios from 'axios'
-import { addJob } from '../redux/slices/userSlice'
+import { addJob } from '../../redux/slices/userSlice'
 
 interface IJobButton {
     job: IJob,

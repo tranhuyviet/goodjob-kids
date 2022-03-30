@@ -28,11 +28,7 @@ const userSchema = new Schema({
 
 // return token to client
 userSchema.methods.returnToken = function returnToken() {
-    return generateToken({
-        _id: this._id,
-        name: this.name,
-        userName: this.userName,
-    });
+    return generateToken(this._id);
 };
 
 const User = models.users || model('users', userSchema);
