@@ -5,10 +5,8 @@ import JobButton from '../components/JobButton'
 import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { signup } from '../redux/slices/userSlice'
-import { IJob, IUser } from '../utils/types'
+import { IUser } from '../utils/types'
 import { decodeToken } from '../utils/generate'
-import useSWR from 'swr'
-import fetchApi from '../utils/fetchApi'
 
 const Home: NextPage<{ user: IUser }> = ({ user }) => {
 
