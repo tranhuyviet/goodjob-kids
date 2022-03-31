@@ -1,4 +1,8 @@
-import { IJobDonePopulated, IUserWithJobsDone } from './../../utils/types';
+import {
+    IJobDonePopulated,
+    IUser,
+    IUserWithJobsDone,
+} from './../../utils/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { calculateStars } from '../../utils/generate';
 
@@ -6,23 +10,24 @@ const initialState: IUserWithJobsDone = {
     _id: '',
     name: '',
     userName: '',
-    jobsDone: [],
     totalStars: 0,
+    jobsDone: [],
 };
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        signup: (state, action: PayloadAction<string>) => {
-            state._id = action.payload;
-        },
-
-        setUserLoggedIn: (state, action: PayloadAction<IUserWithJobsDone>) => {
+        signup: (state, action: PayloadAction<IUser>) => {
+            state._id = action.payload._id;
             state.name = action.payload.name;
             state.userName = action.payload.userName;
-            state.jobsDone = action.payload.jobsDone;
-            state.totalStars = calculateStars(state.jobsDone);
+            state.totalStars = action.payload.totalStars;
+        },
+
+        setJobsDone: (state, action: PayloadAction<IJobDonePopulated>) => {
+            state.jobsDone = [...state.jobsDone, action.payload];
+            // state.totalStars = calculateStars(state.jobsDone);
         },
 
         addJob: (state, action: PayloadAction<IJobDonePopulated>) => {
@@ -41,5 +46,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { signup, setUserLoggedIn, addJob } = userSlice.actions;
+export const { signup, setJobsDone, addJob } = userSlice.actions;
 export default userSlice.reducer;
