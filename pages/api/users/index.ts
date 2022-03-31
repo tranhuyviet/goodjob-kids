@@ -36,6 +36,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         const newUser: IUserDocument = new User({
             name: name.trim(),
             userName,
+            totalStars: 0,
         });
 
         // save user to database
@@ -43,7 +44,6 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
 
         // disconnect db
         await db.disconnect();
-
         // return new user
         return resSuccess(res, { token: user.returnToken() });
     } catch (error) {

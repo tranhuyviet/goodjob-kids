@@ -15,6 +15,9 @@ const userSchema = new Schema({
         unique: true,
         trim: true,
     },
+    totalStars: {
+        type: Number,
+    },
     jobsDone: [
         {
             jobId: {
@@ -28,7 +31,12 @@ const userSchema = new Schema({
 
 // return token to client
 userSchema.methods.returnToken = function returnToken() {
-    return generateToken(this._id);
+    return generateToken({
+        _id: this._id,
+        name: this.name,
+        userName: this.userName,
+        totalStars: this.totalStars,
+    });
 };
 
 const User = models.users || model('users', userSchema);

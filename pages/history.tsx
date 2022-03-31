@@ -4,10 +4,10 @@ import { IUser } from '../utils/types'
 import { signup } from '../redux/slices/userSlice'
 import { decodeToken } from '../utils/generate'
 
-const HistoryPage: NextPage<{ user: IUser }> = ({ user }) => {
+const HistoryPage: NextPage<{ userId: string }> = ({ userId }) => {
     const dispatch = useAppDispatch()
-    if (user) {
-        dispatch(signup(user))
+    if (userId) {
+        dispatch(signup(userId))
     }
 
     return (
@@ -19,13 +19,13 @@ export default HistoryPage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const token = context.req.cookies.goodjobKids
-    const user = decodeToken(token)
+    const userId = decodeToken(token)
 
-    if (!user) return { redirect: { destination: '/signup', permanent: false } };
+    if (!userId) return { redirect: { destination: '/signup', permanent: false } };
 
     return {
         props: {
-            user
+            userId
         }
     }
 }

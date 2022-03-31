@@ -12,12 +12,15 @@ interface IRemoveJobVariables {
     jobDoneId?: string
 }
 
-const StarsPage: NextPage<{ user: IUser }> = ({ user }) => {
+const StarsPage: NextPage<{ userId: string }> = ({ userId }) => {
 
+    const userIdInState = useAppSelector(state => state.user._id)
     const dispatch = useAppDispatch()
-    if (user) {
-        dispatch(signup(user))
+    if (userIdInState !== userId) {
+        console.log('STAR HERE: ', JSON.stringify(userIdInState, null, 2) + ' === ' + JSON.stringify(userId, null, 2))
+        dispatch(signup(userId))
     }
+
 
     // const { jobsDone, totalStars } = useAppSelector(state => state.user)
     // const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
@@ -97,13 +100,13 @@ export default StarsPage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const token = context.req.cookies.goodjobKids
-    const user = decodeToken(token)
+    const userId = decodeToken(token)
 
-    if (!user) return { redirect: { destination: '/signup', permanent: false } };
+    if (!userId) return { redirect: { destination: '/signup', permanent: false } };
 
     return {
         props: {
-            user
+            userId
         }
     }
 }

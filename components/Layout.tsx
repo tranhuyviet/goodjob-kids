@@ -1,6 +1,6 @@
 import React, { ReactChild, useEffect } from 'react'
 import Navbar from './Navbar'
-import { useAppDispatch } from '../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import useSWR from 'swr'
 import fetchApi from '../utils/fetchApi'
 import { setUserLoggedIn } from '../redux/slices/userSlice'
@@ -11,22 +11,24 @@ interface IProps {
 }
 
 const Layout = ({ children }: IProps) => {
+    const userId = useAppSelector(state => state.user._id)
+
     const { data: userData, error: errorUser } = useSWR('/users', fetchApi)
     const { data: jobsData, error: errorJobs } = useSWR('/jobs', fetchApi)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (userData) {
+        if (userData && userData.status === 'success') {
             dispatch(setUserLoggedIn(userData.data.user))
         }
-        if (jobsData) {
+        if (jobsData && jobsData.status === 'success') {
             dispatch(setJobs(jobsData.data.jobs))
         }
     }, [userData, jobsData, dispatch]);
 
     if (errorUser || errorJobs) return <p>Something went wrong.</p>
 
-    console.log('LAYOUT - RENDER')
+    console.log('LAYOUT - RENDER', userData, jobsData)
 
     return (
         <div className="relative">
