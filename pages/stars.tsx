@@ -1,25 +1,27 @@
 import moment from "moment";
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import Image from 'next/image'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { IUser } from "../utils/types";
 import { signup, } from '../redux/slices/userSlice'
 import { decodeToken } from "../utils/generate";
+import { useRouter } from "next/router";
 
 interface IRemoveJobVariables {
     jobDoneName?: string
     jobDoneId?: string
 }
 
-const StarsPage: NextPage<{ userId: string }> = ({ userId }) => {
+const StarsPage: NextPage = () => {
+    const router = useRouter()
+    const isUserLoggedin = useAppSelector(state => state.user._id)
 
-    const userIdInState = useAppSelector(state => state.user._id)
-    const dispatch = useAppDispatch()
-    if (userIdInState !== userId) {
-        console.log('STAR HERE: ', JSON.stringify(userIdInState, null, 2) + ' === ' + JSON.stringify(userId, null, 2))
-        dispatch(signup(userId))
-    }
+    useEffect(() => {
+        if (!isUserLoggedin) {
+            router.push('/signup')
+        }
+    }, [isUserLoggedin, router])
 
 
     // const { jobsDone, totalStars } = useAppSelector(state => state.user)
@@ -98,15 +100,15 @@ const StarsPage: NextPage<{ userId: string }> = ({ userId }) => {
 
 export default StarsPage
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const token = context.req.cookies.goodjobKids
-    const userId = decodeToken(token)
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//     const token = context.req.cookies.goodjobKids
+//     const userId = decodeToken(token)
 
-    if (!userId) return { redirect: { destination: '/signup', permanent: false } };
+//     if (!userId) return { redirect: { destination: '/signup', permanent: false } };
 
-    return {
-        props: {
-            userId
-        }
-    }
-}
+//     return {
+//         props: {
+//             userId
+//         }
+//     }
+// }
