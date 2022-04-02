@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const Layout = ({ children }: IProps) => {
-    const user = useAppSelector(state => state.user)
+    // const user = useAppSelector(state => state.user)
 
     // const { data: userData, error: errorUser } = useSWR('/users/jobs-done', fetchApi)
     // const { data: jobsData, error: errorJobs } = useSWR('/jobs', fetchApi)

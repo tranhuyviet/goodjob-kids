@@ -14,14 +14,14 @@ interface IRemoveJobVariables {
 }
 
 const StarsPage: NextPage = () => {
-    const router = useRouter()
-    const isUserLoggedin = useAppSelector(state => state.user._id)
+    // const router = useRouter()
+    // const isUserLoggedin = useAppSelector(state => state.user._id)
 
-    useEffect(() => {
-        if (!isUserLoggedin) {
-            router.push('/signup')
-        }
-    }, [isUserLoggedin, router])
+    // useEffect(() => {
+    //     if (!isUserLoggedin) {
+    //         router.push('/signup')
+    //     }
+    // }, [isUserLoggedin, router])
 
 
     // const { jobsDone, totalStars } = useAppSelector(state => state.user)
