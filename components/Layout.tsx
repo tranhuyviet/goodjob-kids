@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import useSWR from 'swr'
 import fetchApi from '../utils/fetchApi'
-import { setJobsDone } from '../redux/slices/userSlice'
+// import { setJobsDone } from '../redux/slices/userSlice'
 import { setJobs } from '../redux/slices/jobSlice'
 
 interface IProps {
