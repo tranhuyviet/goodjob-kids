@@ -7,7 +7,7 @@ import JobButtonList from '../components/HomePage/JobButtonList'
 import { IUser, IUserWithJobsDone } from '../utils/types'
 import axios from 'axios'
 
-const Home: NextPage<{ user: IUser }> = ({ user }) => {
+const Home: NextPage<{ user: IUserWithJobsDone }> = ({ user }) => {
 
   const dispatch = useAppDispatch()
   if (user) {

@@ -16,6 +16,7 @@ const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
     const handleJobClick = async () => {
         try {
             const { data } = await axios.put(`/users/add-job-done/${job._id}`, { time: Date.now() })
+            console.log('DATAAAAA', data)
             const newJobDone: IJobDonePopulated = {
                 _id: data.data.jobDoneId,
                 jobId: {

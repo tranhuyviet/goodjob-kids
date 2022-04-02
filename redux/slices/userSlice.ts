@@ -18,22 +18,23 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        signup: (state, action: PayloadAction<IUser>) => {
+        signup: (state, action: PayloadAction<IUserWithJobsDone>) => {
             state._id = action.payload._id;
             state.name = action.payload.name;
             state.userName = action.payload.userName;
             state.totalStars = action.payload.totalStars;
+            state.jobsDone = action.payload.jobsDone;
         },
 
-        setJobsDone: (state, action: PayloadAction<IJobDonePopulated>) => {
-            state.jobsDone = [...state.jobsDone, action.payload];
-            // state.totalStars = calculateStars(state.jobsDone);
-        },
+        // setJobsDone: (state, action: PayloadAction<IJobDonePopulated>) => {
+        //     state.jobsDone = [...state.jobsDone, action.payload];
+        //     // state.totalStars = calculateStars(state.jobsDone);
+        // },
 
         addJob: (state, action: PayloadAction<IJobDonePopulated>) => {
             console.log('CACCC', state.jobsDone, action.payload);
             state.jobsDone = [...state.jobsDone, action.payload];
-            // state.totalStars = calculateStars(state.jobsDone);
+            state.totalStars = calculateStars(state.jobsDone);
         },
 
         // removeJob: (state, action: PayloadAction<{ jobDoneId: string }>) => {
@@ -47,5 +48,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { signup, setJobsDone, addJob } = userSlice.actions;
+export const { signup, addJob } = userSlice.actions;
 export default userSlice.reducer;

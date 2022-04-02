@@ -14,19 +14,19 @@ const Layout = ({ children }: IProps) => {
     const user = useAppSelector(state => state.user)
 
     // const { data: userData, error: errorUser } = useSWR('/users/jobs-done', fetchApi)
-    const { data: jobsData, error: errorJobs } = useSWR('/jobs', fetchApi)
-    const dispatch = useAppDispatch()
+    // const { data: jobsData, error: errorJobs } = useSWR('/jobs', fetchApi)
+    // const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        // if (userData && userData.status === 'success') {
-        //     dispatch(setJobsDone(userData.data.jobsDone))
-        // }
-        if (jobsData && jobsData.status === 'success') {
-            dispatch(setJobs(jobsData.data.jobs))
-        }
-    }, [jobsData, dispatch]);
+    // useEffect(() => {
+    //     // if (userData && userData.status === 'success') {
+    //     //     dispatch(setJobsDone(userData.data.jobsDone))
+    //     // }
+    //     if (jobsData && jobsData.status === 'success') {
+    //         dispatch(setJobs(jobsData.data.jobs))
+    //     }
+    // }, [jobsData, dispatch]);
 
-    if (errorJobs) return <p>Something went wrong.</p>
+    //if (errorJobs) return <p>Something went wrong.</p>
 
     console.log('LAYOUT - RENDER')
 
