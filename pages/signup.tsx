@@ -55,8 +55,9 @@ export default SignupPage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const token = context.req.cookies.goodjobKids
-    const userId = decodeToken(token)
-    if (userId) {
+    const user = decodeToken(token)
+    console.log('signup user', user)
+    if (user) {
         return { redirect: { destination: '/', permanent: false } };
     }
     return {

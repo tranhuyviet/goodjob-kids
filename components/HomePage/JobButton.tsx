@@ -25,7 +25,9 @@ const JobButton = ({ job, setIsOpenDialog }: IJobButton) => {
                 },
                 time: Date.now().toString()
             }
+            console.log('NEW JOB', newJobDone)
             dispatch(addJob(newJobDone))
+            console.log('aaaaa')
             setIsOpenDialog(true)
         } catch (error) {
             console.log('AAAA', error)

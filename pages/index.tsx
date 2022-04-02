@@ -4,12 +4,14 @@ import { useAppDispatch } from '../redux/hooks'
 import { signup } from '../redux/slices/userSlice'
 import { decodeToken } from '../utils/generate'
 import JobButtonList from '../components/HomePage/JobButtonList'
+import { IUser, IUserWithJobsDone } from '../utils/types'
+import axios from 'axios'
 
-const Home: NextPage<{ userId: string }> = ({ userId }) => {
+const Home: NextPage<{ user: IUser }> = ({ user }) => {
 
   const dispatch = useAppDispatch()
-  if (userId) {
-    dispatch(signup(userId))
+  if (user) {
+    dispatch(signup(user))
   }
 
   console.log('INDEX PAGE -  RENDER')
@@ -32,13 +34,25 @@ export default Home
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const token = context.req.cookies.goodjobKids
-  const userId = decodeToken(token)
+  const decodeUser = decodeToken(token)
 
-  if (!userId) return { redirect: { destination: '/signup', permanent: false } };
+  let user: IUserWithJobsDone
+
+  if (decodeUser?._id !== null) {
+    const res = await axios.get('/users/' + decodeUser!._id)
+
+    if (res.data.status === 'success') {
+      user = res.data.data.user
+    } else {
+      return { redirect: { destination: '/signup', permanent: false } }
+    }
+  } else {
+    return { redirect: { destination: '/signup', permanent: false } }
+  }
 
   return {
     props: {
-      userId
+      user
     }
   }
 }

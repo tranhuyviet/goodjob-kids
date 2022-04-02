@@ -11,24 +11,24 @@ interface IProps {
 }
 
 const Layout = ({ children }: IProps) => {
-    const userId = useAppSelector(state => state.user._id)
+    const user = useAppSelector(state => state.user)
 
-    const { data: userData, error: errorUser } = useSWR('/users/jobs-done', fetchApi)
+    // const { data: userData, error: errorUser } = useSWR('/users/jobs-done', fetchApi)
     const { data: jobsData, error: errorJobs } = useSWR('/jobs', fetchApi)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (userData && userData.status === 'success') {
-            dispatch(setJobsDone(userData.data.jobsDone))
-        }
+        // if (userData && userData.status === 'success') {
+        //     dispatch(setJobsDone(userData.data.jobsDone))
+        // }
         if (jobsData && jobsData.status === 'success') {
             dispatch(setJobs(jobsData.data.jobs))
         }
-    }, [userData, jobsData, dispatch]);
+    }, [jobsData, dispatch]);
 
-    if (errorUser || errorJobs) return <p>Something went wrong.</p>
+    if (errorJobs) return <p>Something went wrong.</p>
 
-    console.log('LAYOUT - RENDER', userData, jobsData)
+    console.log('LAYOUT - RENDER')
 
     return (
         <div className="relative">

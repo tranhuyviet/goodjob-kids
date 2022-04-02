@@ -8,7 +8,9 @@ const Navbar = () => {
     const { pathname } = useRouter()
     const user = useAppSelector(state => state.user)
 
-    console.log('NAVBAR - RENDER')
+    if (!user._id) return null
+
+    console.log('NAVBAR - RENDER', user)
 
     return (
         <nav className="h-[68px] container flex justify-between items-center bg-gray-100 shadow-md">

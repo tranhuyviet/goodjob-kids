@@ -31,8 +31,9 @@ const userSlice = createSlice({
         },
 
         addJob: (state, action: PayloadAction<IJobDonePopulated>) => {
-            state.jobsDone = [...state.jobsDone!, action.payload];
-            state.totalStars = calculateStars(state.jobsDone);
+            console.log('CACCC', state.jobsDone, action.payload);
+            state.jobsDone = [...state.jobsDone, action.payload];
+            // state.totalStars = calculateStars(state.jobsDone);
         },
 
         // removeJob: (state, action: PayloadAction<{ jobDoneId: string }>) => {
